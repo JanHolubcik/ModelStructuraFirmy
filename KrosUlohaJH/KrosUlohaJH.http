@@ -5,15 +5,14 @@ Accept: application/json
 
 ###
 
+
+###
+
 POST {{KrosUlohaJH_HostAddress}}/api/zamestnanec
 Content-Type: application/json
 
 {
-  "rodneCislo": "123456/7890",
-  "meno": "Ján",
-  "priezvisko": "Novák",
-  "email": "jan.novak@example.com",
-  "titul": "Ing."
+  //Zamestnanec
 }
 
 ###
