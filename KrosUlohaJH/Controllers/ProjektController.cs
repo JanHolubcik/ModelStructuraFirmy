@@ -20,6 +20,36 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Projekt>> PostOrUpdateProjekt(Projekt Projekt)
         {
+            var (success, result) = await CreateOrUpdate(Projekt);
+            return result;
+        }
+
+        [HttpPost("bulk")]
+        public async Task<IActionResult> PostBulkProjekt([FromBody] List<Projekt> Projekt)
+        {
+            var errors = new List<object>();
+            var success = new List<Projekt>();
+
+            foreach (var z in Projekt)
+            {
+                var (ok, result) = await CreateOrUpdate(z);
+
+                if (ok && result is ObjectResult r1 && r1.Value is Projekt zam)
+                    success.Add(zam);
+                else
+                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
+            }
+
+            return Ok(new
+            {
+                uspesne = success.Count,
+                neuspesne = errors.Count,
+                chyby = errors
+            });
+        }
+
+        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Projekt Projekt)
+        {
 
             var existujuci = await _context.Projekty
                 .FirstOrDefaultAsync(z => z.Kod == Projekt.Kod);
@@ -28,9 +58,10 @@ namespace KrosUlohaJH.Controllers
             {
 
                 if (!string.IsNullOrWhiteSpace(Projekt.Kod) &&
-                    await _context.Projekty.AnyAsync(u => u.Kod == Projekt.Kod ))
+                    await _context.Projekty.AnyAsync(u => u.Kod == Projekt.Kod))
                 {
-                    return Conflict(new { sprava = "Projekt s tímto kódom už existuje." });
+
+                    return (false, new ConflictObjectResult(new { sprava = "Projekt s tímto kódom už existuje." }));
                 }
 
                 //aktualizuj hodnoty
@@ -45,25 +76,25 @@ namespace KrosUlohaJH.Controllers
 
 
                 await _context.SaveChangesAsync();
-                return Ok(existujuci);
+                return (true, new OkObjectResult(existujuci)); ;
             }
 
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return (false, new BadRequestObjectResult(ModelState));
             }
 
             // Skontroluj email
-            if (await _context.Projekty.AnyAsync(u => u.Kod ==   Projekt.Kod))
+            if (await _context.Projekty.AnyAsync(u => u.Kod == Projekt.Kod))
             {
-                return Conflict(new { sprava = "Projekt s tímto kódom už existuje." });
+                return (false, new ConflictObjectResult(new { sprava = "Projekt už existuje" }));
             }
 
             _context.Projekty.Add(Projekt);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProjekt), new { Projekt.Kod }, Projekt);
+            return (true, new CreatedAtActionResult(nameof(GetProjekt), "Projekt", new { rc = Projekt.Kod }, Projekt));
         }
 
         [HttpGet("{kod}")]

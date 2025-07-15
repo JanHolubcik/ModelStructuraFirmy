@@ -20,7 +20,36 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Firma>> PostOrUpdateFirma(Firma Firma)
         {
+            var (success, result) = await CreateOrUpdate(Firma);
+            return result;
+        }
 
+        [HttpPost("bulk")]
+        public async Task<IActionResult> PostBulkFirma([FromBody] List<Firma> Firma)
+        {
+            var errors = new List<object>();
+            var success = new List<Firma>();
+
+            foreach (var z in Firma)
+            {
+                var (ok, result) = await CreateOrUpdate(z);
+
+                if (ok && result is ObjectResult r1 && r1.Value is Firma zam)
+                    success.Add(zam);
+                else
+                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
+            }
+
+            return Ok(new
+            {
+                uspesne = success.Count,
+                neuspesne = errors.Count,
+                chyby = errors
+            });
+        }
+
+        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Firma Firma)
+        {
 
             var existujuci = await _context.Firmy
                 .FirstOrDefaultAsync(z => z.Kod == Firma.Kod);
@@ -29,9 +58,10 @@ namespace KrosUlohaJH.Controllers
             {
 
                 if (!string.IsNullOrWhiteSpace(Firma.Kod) &&
-                    await _context.Firmy.AnyAsync(u => u.Kod == Firma.Kod ))
+                    await _context.Firmy.AnyAsync(u => u.Kod == Firma.Kod))
                 {
-                    return Conflict(new { sprava = "Firma s tímto kódom už existuje." });
+
+                    return (false, new ConflictObjectResult(new { sprava = "Firma s tímto kódom už existuje." }));
                 }
 
                 //aktualizuj hodnoty
@@ -46,26 +76,27 @@ namespace KrosUlohaJH.Controllers
 
 
                 await _context.SaveChangesAsync();
-                return Ok(existujuci);
+                return (true, new OkObjectResult(existujuci)); ;
             }
 
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return (false, new BadRequestObjectResult(ModelState));
             }
 
             // Skontroluj email
             if (await _context.Firmy.AnyAsync(u => u.Kod == Firma.Kod))
             {
-                return Conflict(new { sprava = "Táto firma už existuje." });
+                return (false, new ConflictObjectResult(new { sprava = "Firma už existuje" }));
             }
 
             _context.Firmy.Add(Firma);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetFirma), new { Firma.Kod }, Firma);
+            return (true, new CreatedAtActionResult(nameof(GetFirma), "Firma", new { rc = Firma.Kod }, Firma));
         }
+
 
         [HttpGet("{kod}")]
         public async Task<ActionResult<FirmaDto>> GetFirma(string kod)

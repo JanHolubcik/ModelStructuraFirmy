@@ -19,19 +19,49 @@ namespace KrosUlohaJH.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Divizia>> PostOrUpdateOddelenie(Oddelenie Oddelenie)
+        {  
+                var (success, result) = await CreateOrUpdate(Oddelenie);
+                return result;
+        }
+
+        [HttpPost("bulk")]
+        public async Task<IActionResult> PostBulkOddelenia([FromBody] List<Oddelenie> Oddelenia)
+        {
+            var errors = new List<object>();
+            var success = new List<Oddelenie>();
+
+            foreach (var z in Oddelenia)
+            {
+                var (ok, result) = await CreateOrUpdate(z);
+
+                if (ok && result is ObjectResult r1 && r1.Value is Oddelenie zam)
+                    success.Add(zam);
+                else
+                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
+            }
+
+            return Ok(new
+            {
+                uspesne = success.Count,
+                neuspesne = errors.Count,
+                chyby = errors
+            });
+        }
+
+        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Oddelenie Oddelenie)
         {
 
-
-            var existujuci = await _context.Divizie
+            var existujuci = await _context.Oddelenia
                 .FirstOrDefaultAsync(z => z.Kod == Oddelenie.Kod);
 
             if (existujuci != null)
             {
 
                 if (!string.IsNullOrWhiteSpace(Oddelenie.Kod) &&
-                    await _context.Divizie.AnyAsync(u => u.Kod == Oddelenie.Kod ))
+                    await _context.Oddelenia.AnyAsync(u => u.Kod == Oddelenie.Kod))
                 {
-                    return Conflict(new { sprava = "Divízia s tímto kódom už existuje." });
+                    
+                    return (false, new ConflictObjectResult(new { sprava = "Oddelenie s tímto kódom už existuje." }));
                 }
 
                 //aktualizuj hodnoty
@@ -41,36 +71,36 @@ namespace KrosUlohaJH.Controllers
 
 
                 if (!string.IsNullOrWhiteSpace(Oddelenie.VeduciOddeleniaRc))
-                    existujuci.VeduciRC = Oddelenie.VeduciOddeleniaRc;
+                    existujuci.VeduciOddeleniaRc = Oddelenie.VeduciOddeleniaRc;
 
 
 
                 await _context.SaveChangesAsync();
-                return Ok(existujuci);
+                return  (true, new OkObjectResult(existujuci)); ;
             }
 
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return (false, new BadRequestObjectResult(ModelState));
             }
 
             // Skontroluj email
-            if (await _context.Divizie.AnyAsync(u => u.Kod == Oddelenie .Kod))
+            if (await _context.Oddelenia.AnyAsync(u => u.Kod == Oddelenie.Kod))
             {
-                return Conflict(new { sprava = "Tento email už je zaregistrovaný." });
+                return (false, new ConflictObjectResult(new { sprava = "Toto oddelenie už existuje" }));
             }
 
             _context.Oddelenia.Add(Oddelenie);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOddelenie), new { Oddelenie.Kod }, Oddelenie);
+            return (true, new CreatedAtActionResult(nameof(GetOddelenie), "Oddelenie", new { rc = Oddelenie.Kod }, Oddelenie));
         }
 
         [HttpGet("{kod}")]
         public async Task<ActionResult<OddeleniaDto>> GetOddelenie(string kod)
         {
-            var divizia = await _context.Oddelenia
+            var oddelenie = await _context.Oddelenia
                 .Where(d => d.Kod == kod)
                 .Include(d => d.Zamestnanci)
                 .Select(d => new OddeleniaDto
@@ -88,27 +118,27 @@ namespace KrosUlohaJH.Controllers
                 })
                 .FirstOrDefaultAsync();
 
-            if (divizia == null)
+            if (oddelenie == null)
                 return NotFound(new { message = "Divízia nebola nájdená." });
 
-            return Ok(divizia);
+            return Ok(oddelenie);
         }
 
         [HttpDelete("{kod}")]
-        public async Task<ActionResult<Divizia>> DeleteDivizia(string Kod)
+        public async Task<ActionResult<Oddelenie>> DeleteOddelenie(string Kod)
         {
-            var divizia = await _context.Divizie
+            var oddelenie = await _context.Oddelenia
                 .FirstOrDefaultAsync(z => z.Kod == Kod);
 
-            if (divizia == null)
+            if (oddelenie == null)
             {
                 return NotFound();
             }
 
-            _context.Divizie.Remove(divizia);
+            _context.Oddelenia.Remove(oddelenie);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Divízia bola úspešne odstránená." });
+            return Ok(new { message = "Oddelenie bolo úspešne odstránené." });
         }
     }
 }

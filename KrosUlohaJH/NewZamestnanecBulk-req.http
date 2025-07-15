@@ -1,5 +1,14 @@
+# @name newOddeleniaBulk
+POST https://localhost:7031/api/oddelenia/bulk
+Content-Type: application/json
+
+{{Newoddelenia}}
+
+###
+
 # @name newZamestnanecBulk
 POST https://localhost:7031/api/zamestnanec/bulk
 Content-Type: application/json
 
 {{NewZamestnanci}}
+

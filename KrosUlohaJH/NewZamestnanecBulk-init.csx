@@ -1,6 +1,4 @@
-﻿using static Script;
-
-public class Oddelenie
+﻿public class Oddelenie
 {
     public int Id { get; set; }
     public required string Nazov { get; set; }
@@ -30,12 +28,14 @@ public class Projekt
 
 var oddelenia = new List<Oddelenie>
 {
-    new() {  Nazov = "Informačné technológie", Kod = "IT"},
-    new() {  Nazov = "Ľudské zdroje", Kod = "HR" },
-    new() {  Nazov = "Marketing", Kod = "MKT" },
-    new() {  Nazov = "Financie", Kod = "FIN"},
-    new() {  Nazov = "Logistika", Kod = "LOG" }
+    new Oddelenie {  Nazov = "Informačné technológie", Kod = "IT"},
+    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR" },
+    new Oddelenie {  Nazov = "Marketing", Kod = "MKT" },
+    new Oddelenie {  Nazov = "Financie", Kod = "FIN"},
+    new Oddelenie {  Nazov = "Logistika", Kod = "LOG" }
 };
+//Zeditujem si oddelenia po tom ako pridám používateľov, potom môžem postupne pridávať aj projekty atď. aby 
+//som nemusel znova pridávať cudzie kľúče.
 
 var projekty = new List<Projekt>
 {
@@ -296,5 +296,5 @@ var zamestnanci = new List<Zamestnanec>
     }
 };
 
-tp.SetVariable("Newoddelenia", zamestnanci.ToJsonString(), "oddelenia");
+tp.SetVariable("Newoddelenia", oddelenia.ToJsonString(), "oddelenia");
 tp.SetVariable("NewZamestnanci", zamestnanci.ToJsonString(), "zamestnanci");

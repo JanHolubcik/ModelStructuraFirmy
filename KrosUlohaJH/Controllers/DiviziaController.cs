@@ -20,7 +20,36 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Divizia>> PostOrUpdateDivizia(Divizia Divizia)
         {
+            var (success, result) = await CreateOrUpdate(Divizia);
+            return result;
+        }
 
+        [HttpPost("bulk")]
+        public async Task<IActionResult> PostBulkDivizia([FromBody] List<Divizia> Divizia)
+        {
+            var errors = new List<object>();
+            var success = new List<Divizia>();
+
+            foreach (var z in Divizia)
+            {
+                var (ok, result) = await CreateOrUpdate(z);
+
+                if (ok && result is ObjectResult r1 && r1.Value is Divizia zam)
+                    success.Add(zam);
+                else
+                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
+            }
+
+            return Ok(new
+            {
+                uspesne = success.Count,
+                neuspesne = errors.Count,
+                chyby = errors
+            });
+        }
+
+        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Divizia Divizia)
+        {
 
             var existujuci = await _context.Divizie
                 .FirstOrDefaultAsync(z => z.Kod == Divizia.Kod);
@@ -29,9 +58,10 @@ namespace KrosUlohaJH.Controllers
             {
 
                 if (!string.IsNullOrWhiteSpace(Divizia.Kod) &&
-                    await _context.Divizie.AnyAsync(u => u.Kod == Divizia.Kod ))
+                    await _context.Divizie.AnyAsync(u => u.Kod == Divizia.Kod))
                 {
-                    return Conflict(new { sprava = "Divízia s tímto kódom už existuje." });
+
+                    return (false, new ConflictObjectResult(new { sprava = "Divizia s tímto kódom už existuje." }));
                 }
 
                 //aktualizuj hodnoty
@@ -46,25 +76,25 @@ namespace KrosUlohaJH.Controllers
 
 
                 await _context.SaveChangesAsync();
-                return Ok(existujuci);
+                return (true, new OkObjectResult(existujuci)); ;
             }
 
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return (false, new BadRequestObjectResult(ModelState));
             }
 
             // Skontroluj email
             if (await _context.Divizie.AnyAsync(u => u.Kod == Divizia.Kod))
             {
-                return Conflict(new { sprava = "Tento email už je zaregistrovaný." });
+                return (false, new ConflictObjectResult(new { sprava = "Divizia už existuje" }));
             }
 
             _context.Divizie.Add(Divizia);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetDivizia), new { Divizia.Kod }, Divizia);
+            return (true, new CreatedAtActionResult(nameof(GetDivizia), "Divizia", new { rc = Divizia.Kod }, Divizia));
         }
 
         [HttpGet("{kod}")]

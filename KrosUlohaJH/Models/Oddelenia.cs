@@ -15,7 +15,7 @@ namespace KrosUlohaJH.Models
         public int? ProjektId { get; set; }
         public Projekt? Projekt { get; set; }
 
-        [Required]
+
         [ForeignKey(nameof(VeduciOddelenia))]
         public  string? VeduciOddeleniaRc { get; set; }
         public Zamestnanec? VeduciOddelenia { get; set; }
