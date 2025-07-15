@@ -1,0 +1,5 @@
+# @name newZamestnanecBulk
+POST https://localhost:7031/api/zamestnanec/bulk
+Content-Type: application/json
+
+{{NewZamestnanci}}

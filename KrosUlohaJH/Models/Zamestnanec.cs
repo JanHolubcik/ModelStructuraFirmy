@@ -8,7 +8,7 @@ namespace KrosUlohaJH.Models
         [Key]
         [Required]
         [RegularExpression(@"^\d{6}/?\d{4}$", ErrorMessage = "Neplatný formát rodného čísla.")] //skotroluj, či má čísla a lomítko.
-        [StringLength(11, MinimumLength = 11, ErrorMessage = "Rodné číslo musí mať presne 11 znakov.")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "Rodné číslo musí mať presne 11 znakov a lomítko.")]
         public required string RodneCislo { get; set; }
 
         [Required(ErrorMessage = "Meno je povinné.")]
@@ -16,7 +16,7 @@ namespace KrosUlohaJH.Models
         public required string  Meno { get; set; }
 
         [Required(ErrorMessage = "Priezvisko je povinné")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Meno musí mať aspoň 2 znaky.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Priezvisko musí mať aspoň 2 znaky.")]
         public required string Priezvisko { get; set; }
 
 

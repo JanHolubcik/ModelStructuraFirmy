@@ -1,18 +1,25 @@
 @KrosUlohaJH_HostAddress = https://localhost:7031
 
-GET {{KrosUlohaJH_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
-
-
-###
 
 POST {{KrosUlohaJH_HostAddress}}/api/zamestnanec
 Content-Type: application/json
 
 {
-  //Zamestnanec
+  "rodneCislo": "123456/7890",
+  "meno": "Roman",
+  "priezvisko": "Novák",
+  "email": "jan.novak@example.com",
+  "titul": "Ing."
 }
+
+
+
+
+@rc=string
+GET {{KrosUlohaJH_HostAddress}}/api/zamestnanec/{{rc}}
+
+###
+
+GET {{KrosUlohaJH_HostAddress}}/api/zamestnanec?rc=123456/7890
 
 ###
