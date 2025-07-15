@@ -9,6 +9,7 @@
 
 public class Zamestnanec
 {
+    public int Id { get; set; }
     public string RodneCislo { get; set; }
     public string Meno { get; set; }
     public string Priezvisko { get; set; }
@@ -26,43 +27,99 @@ public class Projekt
     public string? VeduciProjektuRC { get; set; }
 }
 
+public class Firma
+{
+    public int Id { get; set; }
+    public required string Nazov { get; set; }
+    public required string Kod { get; set; }
+    public string? RiaditelRc { get; set; }
+}
+
+public class Divizia
+{
+    public int Id { get; set; }
+    public required string Nazov { get; set; }
+    public required string Kod { get; set; }
+
+    public int? FirmaId { get; set; }
+    public Firma? Firma { get; set; }
+
+    public string? VeduciRC { get; set; }
+    public Zamestnanec? Veduci { get; set; } //null! potlačí warning, že je null
+
+}
+
+var Firmy = new List<Firma>
+{
+    new Firma { Nazov = "Kros", Kod = "KR",RiaditelRc = "900101/1234"},
+    new Firma {  Nazov = "Vúb Banka", Kod = "VUB",RiaditelRc = "890315/5678"},
+};
+
+
+var Divizie = new List<Divizia>
+{
+    new Divizia {  Nazov = "Žilina", Kod = "KR",VeduciRC = "900101/1234",FirmaId = 1},
+    new Divizia {  Nazov = "Bratislava", Kod = "KRBR",VeduciRC = "981231/1234", FirmaId = 1},
+    new Divizia {  Nazov = "Vúb Banka", Kod = "VUB",VeduciRC = "890315/5678",FirmaId = 2},
+};
+
+
 var oddelenia = new List<Oddelenie>
 {
     new Oddelenie {  Nazov = "Informačné technológie", Kod = "IT"},
-    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR" },
-    new Oddelenie {  Nazov = "Marketing", Kod = "MKT" },
-    new Oddelenie {  Nazov = "Financie", Kod = "FIN"},
-    new Oddelenie {  Nazov = "Logistika", Kod = "LOG" }
+    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR",  },
+    new Oddelenie {  Nazov = "Marketing", Kod = "MKT",  },
+    new Oddelenie {  Nazov = "Financie", Kod = "FIN",  },
+    new Oddelenie {  Nazov = "Predajcovia", Kod = "PRE"},
+};
+var oddeleniaWithRC = new List<Oddelenie>
+{
+    new Oddelenie {  Nazov = "Informačné technológie", Kod = "IT",ProjektId=1, VeduciOddeleniaRc ="920402/0001"},
+    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR",ProjektId=2, VeduciOddeleniaRc ="950125/0002" },
+    new Oddelenie {  Nazov = "Marketing", Kod = "MKT", ProjektId=3, VeduciOddeleniaRc ="920507/1111"  },
+    new Oddelenie {  Nazov = "Financie", Kod = "FIN", ProjektId=4, VeduciOddeleniaRc ="900228/8888" },
+    new Oddelenie {  Nazov = "Predajcovia", Kod = "PRE",ProjektId=2, VeduciOddeleniaRc ="890120/0006" },
 };
 //Zeditujem si oddelenia po tom ako pridám používateľov, potom môžem postupne pridávať aj projekty atď. aby 
 //som nemusel znova pridávať cudzie kľúče.
 
 var projekty = new List<Projekt>
 {
-    new()
+    new Projekt
     {
         Nazov = "Projekt Orion",
         Kod = "PRJ-ORION",
+        DiviziaId = 1,
+        VeduciProjektuRC ="870927/4444"
     },
-    new()
+    new Projekt
     {
         Nazov = "Projekt Apollo",
         Kod = "PRJ-APOLLO",
+        DiviziaId = 2,
+        VeduciProjektuRC ="930303/5555"
+
     },
-    new()
+    new Projekt
     {
         Nazov = "Projekt Titan",
         Kod = "PRJ-TITAN",
+        DiviziaId = 1,
+        VeduciProjektuRC ="950709/7777"
     },
-    new()
+    new Projekt
     {
         Nazov = "Projekt Mercury",
         Kod = "PRJ-MERC",
+        DiviziaId = 2,
+        VeduciProjektuRC ="860116/6666"
     },
-    new()
+    new Projekt
     {
         Nazov = "Projekt Atlas",
         Kod = "PRJ-ATLAS",
+        DiviziaId = 1,
+        VeduciProjektuRC ="910812/3333"
     }
 };
 
@@ -293,8 +350,147 @@ var zamestnanci = new List<Zamestnanec>
         Email = "sona.kubisova@example.com",
         Titul = "",
         OddelenieId = 3
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "910101/0001",
+        Meno = "Ján",
+        Priezvisko = "Novotný",
+        Email = "jan.novotny@example.com",
+        Titul = "Ing.",
+        OddelenieId = 1
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "880305/1234",
+        Meno = "Lucia",
+        Priezvisko = "Kováčová",
+        Email = "lucia.kovacova@example.com",
+        Titul = "",
+        OddelenieId = 2
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "970215/4567",
+        Meno = "Peter",
+        Priezvisko = "Baláž",
+        Email = "peter.balaz@example.com",
+        Titul = "Mgr.",
+        OddelenieId = 3
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "850610/7890",
+        Meno = "Mária",
+        Priezvisko = "Zelená",
+        Email = "maria.zelena@example.com",
+        Titul = "",
+        OddelenieId = 4
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "930101/1111",
+        Meno = "Róbert",
+        Priezvisko = "Horváth",
+        Email = "robert.horvath@example.com",
+        Titul = "Bc.",
+        OddelenieId = 5
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "890512/2222",
+        Meno = "Eva",
+        Priezvisko = "Tóthová",
+        Email = "eva.tothova@example.com",
+        Titul = "",
+        OddelenieId = 1
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "860823/3333",
+        Meno = "Tomáš",
+        Priezvisko = "Urban",
+        Email = "tomas.urban@example.com",
+        Titul = "Ing.",
+        OddelenieId = 2
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "950307/4444",
+        Meno = "Zuzana",
+        Priezvisko = "Farkašová",
+        Email = "zuzana.farkasova@example.com",
+        Titul = "",
+        OddelenieId = 3
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "920102/5555",
+        Meno = "Michal",
+        Priezvisko = "Kollár",
+        Email = "michal.kollar@example.com",
+        Titul = "Mgr.",
+        OddelenieId = 4
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "870918/6666",
+        Meno = "Andrea",
+        Priezvisko = "Vargová",
+        Email = "andrea.vargova@example.com",
+        Titul = "",
+        OddelenieId = 5
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "990321/7777",
+        Meno = "Martin",
+        Priezvisko = "Biely",
+        Email = "martin.biely@example.com",
+        Titul = "Bc.",
+        OddelenieId = null
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "940417/8888",
+        Meno = "Kristína",
+        Priezvisko = "Čierna",
+        Email = "kristina.cierna@example.com",
+        Titul = "",
+        OddelenieId = 1
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "930908/9999",
+        Meno = "Samuel",
+        Priezvisko = "Majer",
+        Email = "samuel.majer@example.com",
+        Titul = "Ing.",
+        OddelenieId = 2
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "950125/0002",
+        Meno = "Tatiana",
+        Priezvisko = "Mikušová",
+        Email = "tatiana.mikusova@example.com",
+        Titul = "",
+        OddelenieId = null
+    },
+    new Zamestnanec
+    {
+        RodneCislo = "981231/1234",
+        Meno = "Igor",
+        Priezvisko = "Šimek",
+        Email = "igor.simek@example.com",
+        Titul = "Mgr.",
+        OddelenieId = 5
     }
 };
 
+tp.SetVariable("NewProjekty", projekty.ToJsonString(), "projekt");
+tp.SetVariable("NewDivizie", Divizie.ToJsonString(), "divizie");
+tp.SetVariable("NewFirmy", Firmy.ToJsonString(), "firmy");
 tp.SetVariable("Newoddelenia", oddelenia.ToJsonString(), "oddelenia");
+tp.SetVariable("NewoddeleniaRC", oddeleniaWithRC.ToJsonString(), "oddeleniaRC");
 tp.SetVariable("NewZamestnanci", zamestnanci.ToJsonString(), "zamestnanci");

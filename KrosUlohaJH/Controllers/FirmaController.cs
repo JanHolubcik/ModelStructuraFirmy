@@ -57,12 +57,7 @@ namespace KrosUlohaJH.Controllers
             if (existujuci != null)
             {
 
-                if (!string.IsNullOrWhiteSpace(Firma.Kod) &&
-                    await _context.Firmy.AnyAsync(u => u.Kod == Firma.Kod))
-                {
 
-                    return (false, new ConflictObjectResult(new { sprava = "Firma s tímto kódom už existuje." }));
-                }
 
                 //aktualizuj hodnoty
                 if (!string.IsNullOrWhiteSpace(Firma.Nazov))

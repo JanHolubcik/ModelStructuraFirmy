@@ -57,12 +57,7 @@ namespace KrosUlohaJH.Controllers
             if (existujuci != null)
             {
 
-                if (!string.IsNullOrWhiteSpace(Oddelenie.Kod) &&
-                    await _context.Oddelenia.AnyAsync(u => u.Kod == Oddelenie.Kod))
-                {
-                    
-                    return (false, new ConflictObjectResult(new { sprava = "Oddelenie s tímto kódom už existuje." }));
-                }
+
 
                 //aktualizuj hodnoty
                 if (!string.IsNullOrWhiteSpace(Oddelenie.Nazov))
@@ -73,7 +68,8 @@ namespace KrosUlohaJH.Controllers
                 if (!string.IsNullOrWhiteSpace(Oddelenie.VeduciOddeleniaRc))
                     existujuci.VeduciOddeleniaRc = Oddelenie.VeduciOddeleniaRc;
 
-
+                if (Oddelenie.ProjektId.HasValue)
+                    existujuci.ProjektId = Oddelenie.ProjektId;
 
                 await _context.SaveChangesAsync();
                 return  (true, new OkObjectResult(existujuci)); ;

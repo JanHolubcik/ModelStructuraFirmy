@@ -13,9 +13,9 @@ namespace KrosUlohaJH.Models
         [Required]
         public required string Kod { get; set; }
 
-        public int DiviziaId { get; set; }
-        [Required]
-        public required Divizia Divizia { get; set; }
+        public int? DiviziaId { get; set; }
+     
+        public  Divizia? Divizia { get; set; }
 
         [ForeignKey(nameof(VeduciProjektu))]
         public string? VeduciProjektuRC { get; set; }

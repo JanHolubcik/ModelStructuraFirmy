@@ -57,12 +57,7 @@ namespace KrosUlohaJH.Controllers
             if (existujuci != null)
             {
 
-                if (!string.IsNullOrWhiteSpace(Divizia.Kod) &&
-                    await _context.Divizie.AnyAsync(u => u.Kod == Divizia.Kod))
-                {
 
-                    return (false, new ConflictObjectResult(new { sprava = "Divizia s tímto kódom už existuje." }));
-                }
 
                 //aktualizuj hodnoty
                 if (!string.IsNullOrWhiteSpace(Divizia.Nazov))
@@ -73,7 +68,8 @@ namespace KrosUlohaJH.Controllers
                 if (!string.IsNullOrWhiteSpace(Divizia.VeduciRC))
                     existujuci.VeduciRC = Divizia.VeduciRC;
 
-
+                if (Divizia.FirmaId.HasValue)
+                    existujuci.FirmaId = Divizia.FirmaId;
 
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci)); ;
