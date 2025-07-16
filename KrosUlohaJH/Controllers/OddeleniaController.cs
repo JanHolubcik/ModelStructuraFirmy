@@ -107,7 +107,7 @@ namespace KrosUlohaJH.Controllers
                     {
                         Meno = p.Meno,
                         Priezvisko = p.Priezvisko,
-                        RC   = p.RodneCislo,
+                        RC = p.RodneCislo,
                         Titul = p.Titul,
                     
                     }).ToList()

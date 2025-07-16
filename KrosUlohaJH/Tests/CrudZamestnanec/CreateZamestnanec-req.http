@@ -1,0 +1,9 @@
+# @name createZamestnanec
+POST https://localhost:7031/api/zamestnanec
+Content-Type: application/json
+
+{{NewZamestnanec}}
+
+###
+
+

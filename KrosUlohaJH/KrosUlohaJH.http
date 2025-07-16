@@ -44,3 +44,12 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{KrosUlohaJH_HostAddress}}/api/divizia
+Content-Type: application/json
+
+{
+  //Divizia
+}
+
+###
