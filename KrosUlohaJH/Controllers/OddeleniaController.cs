@@ -76,8 +76,25 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            if (!ModelState.IsValid)
+            var contextEdit = new ValidationContext(Oddelenie);
+            var resultsEdit = new List<ValidationResult>();
+            bool isValidEdit = Validator.TryValidateObject(
+                Oddelenie,
+                contextEdit,
+                resultsEdit,
+                validateAllProperties: true
+            );
+
+            if (!isValidEdit)
             {
+                foreach (var validationResult in resultsEdit)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
+                    }
+                }
+
                 return (false, new BadRequestObjectResult(ModelState));
             }
 
@@ -107,7 +124,7 @@ namespace KrosUlohaJH.Controllers
                     {
                         Meno = p.Meno,
                         Priezvisko = p.Priezvisko,
-                        RC = p.RodneCislo,
+                        RodneCislo = p.RodneCislo,
                         Titul = p.Titul,
                     
                     }).ToList()

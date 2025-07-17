@@ -1,0 +1,36 @@
+# @name updateZamestnanec
+POST https://localhost:7031/api/zamestnanec
+Content-Type: application/json
+
+{
+    "RodneCislo": "990401/9999",
+    "Titul": "Mgr.",
+    "OddelenieId": 1
+}
+
+
+###
+
+# @name updateZamestnanecBulk
+POST https://localhost:7031/api/zamestnanec/bulk
+Content-Type: application/json
+
+[
+    {
+        "RodneCislo": "990401/9999",
+        "Titul": "Mgr.",
+        "OddelenieId": 1
+    },
+    {
+        "RodneCislo": "990401/4834",
+        "Titul": "Mgr.",
+        "OddelenieId": 1
+    }
+]
+
+###
+
+
+
+
+

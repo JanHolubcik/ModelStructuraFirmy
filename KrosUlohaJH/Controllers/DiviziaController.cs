@@ -1,8 +1,10 @@
 ﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -18,20 +20,41 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Divizia>> PostOrUpdateDivizia(Divizia Divizia)
+        public async Task<ActionResult<Divizia>> PostOrUpdateDivizia(DiviziaDto DiviziaDto)
         {
+   
+
+                        var Divizia = new Divizia
+                        {
+                           Kod= DiviziaDto.Kod,
+                           FirmaId = DiviziaDto.FirmaId,
+                           Nazov = DiviziaDto.Nazov,
+                           VeduciRC = DiviziaDto.VeduciRC,
+                           
+
+                        };
             var (success, result) = await CreateOrUpdate(Divizia);
             return result;
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkDivizia([FromBody] List<Divizia> Divizia)
+        public async Task<IActionResult> PostBulkDivizia([FromBody] List<DiviziaDto> Divizia)
         {
             var errors = new List<object>();
             var success = new List<Divizia>();
 
-            foreach (var z in Divizia)
+            foreach (var DiviziaDto in Divizia)
             {
+
+                var z = new Divizia
+                {
+                    Kod = DiviziaDto.Kod,
+                    FirmaId = DiviziaDto.FirmaId,
+                    Nazov = DiviziaDto.Nazov,
+                    VeduciRC = DiviziaDto.VeduciRC,
+
+
+                };
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Divizia zam)
@@ -76,8 +99,26 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            if (!ModelState.IsValid)
+
+            var contextEdit = new ValidationContext(Divizia);
+            var resultsEdit = new List<ValidationResult>();
+            bool isValidEdit = Validator.TryValidateObject(
+                Divizia,
+                contextEdit,
+                resultsEdit,
+                validateAllProperties: true
+            );
+
+            if (!isValidEdit)
             {
+                foreach (var validationResult in resultsEdit)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
+                    }
+                }
+
                 return (false, new BadRequestObjectResult(ModelState));
             }
 
@@ -142,4 +183,9 @@ public class DiviziaDto
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<ProjektDto>? Projekty { get; set; }
+
+    public int? FirmaId { get; set; }
+
+    public string? VeduciRC { get; set; }
+
 }

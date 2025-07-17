@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 
-
-
 public class Zamestnanec
 {
     public int Id { get; set; }
@@ -13,6 +11,7 @@ public class Zamestnanec
     public int? OddelenieId { get; set; }
 }
 
+string rodnecisloDelete = "990401/4834";
 Zamestnanec zamestnanecCrud = new Zamestnanec
 {
     RodneCislo = "990401/4834",
@@ -22,16 +21,6 @@ Zamestnanec zamestnanecCrud = new Zamestnanec
     Titul = "MGLR.",
 };
 
-Zamestnanec zamestnanecUpdate = new Zamestnanec
-{
-    RodneCislo = "990401/4834",
-    Titul = "Mgr.",
-    OddelenieId = 1
-};
-
-string rodnecisloDelete = "990401/4834";
-
-
 tp.SetVariable("NewZamestnanec", zamestnanecCrud.ToJsonString());
-tp.SetVariable("UpdateZamestnanec", zamestnanecUpdate.ToJsonString());
-tp.SetVariable("GetDeleteZamestnanec", rodnecisloDelete);
+
+tp.SetVariable("DeleteZamestnanec", rodnecisloDelete);

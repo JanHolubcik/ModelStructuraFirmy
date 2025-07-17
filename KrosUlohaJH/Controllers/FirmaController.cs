@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -18,20 +19,34 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Firma>> PostOrUpdateFirma(Firma Firma)
+        public async Task<ActionResult<Firma>> PostOrUpdateFirma(FirmaDto FirmaDTO)
         {
+            var Firma = new Firma
+            {
+                Kod = FirmaDTO.Kod,
+                Nazov = FirmaDTO.Nazov,
+                RiaditelRc = FirmaDTO.RiaditelRc,              
+
+            };
             var (success, result) = await CreateOrUpdate(Firma);
             return result;
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkFirma([FromBody] List<Firma> Firma)
+        public async Task<IActionResult> PostBulkFirma([FromBody] List<FirmaDto> FirmaDTO)
         {
             var errors = new List<object>();
             var success = new List<Firma>();
 
-            foreach (var z in Firma)
+            foreach (var firma in FirmaDTO)
             {
+                var z = new Firma
+                {
+                    Kod = firma.Kod,
+                    Nazov = firma.Nazov,
+                    RiaditelRc = firma.RiaditelRc,
+
+                };
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Firma zam)
@@ -75,8 +90,25 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            if (!ModelState.IsValid)
+            var contextEdit = new ValidationContext(Firma);
+            var resultsEdit = new List<ValidationResult>();
+            bool isValidEdit = Validator.TryValidateObject(
+                Firma,
+                contextEdit,
+                resultsEdit,
+                validateAllProperties: true
+            );
+
+            if (!isValidEdit)
             {
+                foreach (var validationResult in resultsEdit)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
+                    }
+                }
+
                 return (false, new BadRequestObjectResult(ModelState));
             }
 
@@ -141,5 +173,9 @@ public class FirmaDto
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<DiviziaDto>? Divizie { get; set; }
+
+    public string? RiaditelRc { get; set; }  // FK na Zamestnanec.RodneCislo
+
+
 }
 

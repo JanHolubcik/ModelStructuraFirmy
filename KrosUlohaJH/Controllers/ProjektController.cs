@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -18,20 +19,35 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Projekt>> PostOrUpdateProjekt(Projekt Projekt)
+        public async Task<ActionResult<Projekt>> PostOrUpdateProjekt(ProjektDto ProjektDTO)
         {
+            Projekt Projekt = new Projekt
+            {
+                Kod = ProjektDTO.Kod,
+                Nazov = ProjektDTO.Nazov,
+                DiviziaId = ProjektDTO.DiviziaId,
+                VeduciProjektuRC = ProjektDTO.VeduciProjektuRC,
+            };
             var (success, result) = await CreateOrUpdate(Projekt);
             return result;
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkProjekt([FromBody] List<Projekt> Projekt)
+        public async Task<IActionResult> PostBulkProjekt([FromBody] List<ProjektDto> Projekt)
         {
             var errors = new List<object>();
             var success = new List<Projekt>();
 
-            foreach (var z in Projekt)
+            foreach (var projektDto in Projekt)
             {
+
+                Projekt z = new Projekt
+                {
+                    Kod = projektDto.Kod,
+                    Nazov = projektDto.Nazov,
+                    DiviziaId = projektDto.DiviziaId,
+                    VeduciProjektuRC = projektDto.VeduciProjektuRC,
+                };
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Projekt zam)
@@ -76,8 +92,25 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            if (!ModelState.IsValid)
+            var contextEdit = new ValidationContext(Projekt);
+            var resultsEdit = new List<ValidationResult>();
+            bool isValidEdit = Validator.TryValidateObject(
+                Projekt,
+                contextEdit,
+                resultsEdit,
+                validateAllProperties: true
+            );
+
+            if (!isValidEdit)
             {
+                foreach (var validationResult in resultsEdit)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
+                    }
+                }
+
                 return (false, new BadRequestObjectResult(ModelState));
             }
 
@@ -142,4 +175,9 @@ public class ProjektDto
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<OddeleniaDto>? Projekty { get; set; }
+
+    public int? DiviziaId { get; set; }
+
+    public string? VeduciProjektuRC { get; set; }
+
 }

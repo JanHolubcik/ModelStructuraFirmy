@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -19,26 +21,46 @@ namespace KrosUlohaJH.Controllers
 
         // post, posielam zamestnanca aby sa vytvoril na DB alebo zeditoval
         [HttpPost]
-        public async Task<ActionResult<Zamestnanec>> PostOrUpdateZamestnanec(Zamestnanec zamestnanec)
+        public async Task<ActionResult<Zamestnanec>> PostOrUpdateZamestnanec(ZamestnanecDto zamestnanecDTO)
         {
+            var zamestnanec = new Zamestnanec
+            {
+                RodneCislo = zamestnanecDTO.RodneCislo,
+                Titul = zamestnanecDTO.Titul,
+                OddelenieId = zamestnanecDTO.OddelenieId,
+                Email = zamestnanecDTO.Email,
+                Meno = zamestnanecDTO.Meno,
+                Priezvisko = zamestnanecDTO.Priezvisko,
+                
+            };
             var (success, result) = await CreateOrUpdate(zamestnanec);
             return result;
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkZamestnanci([FromBody] List<Zamestnanec> zamestnanci)
+        public async Task<IActionResult> PostBulkZamestnanci([FromBody] List<ZamestnanecDto> zamestnanci)
         {
             var errors = new List<object>();
             var success = new List<Zamestnanec>();
 
-            foreach (var z in zamestnanci)
+            foreach (var zamestnanecDTO in zamestnanci)
             {
-                var (ok, result) = await CreateOrUpdate(z);
+                var zamestnanec = new Zamestnanec
+                {
+                    RodneCislo = zamestnanecDTO.RodneCislo,
+                    Titul = zamestnanecDTO.Titul,
+                    OddelenieId = zamestnanecDTO.OddelenieId,
+                    Email = zamestnanecDTO.Email,
+                    Meno = zamestnanecDTO.Meno,
+                    Priezvisko = zamestnanecDTO.Priezvisko,
+
+                };
+                var (ok, result) = await CreateOrUpdate(zamestnanec);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Zamestnanec zam)
                     success.Add(zam);
                 else
-                    errors.Add(new { rodneCislo = z.RodneCislo, chyba = (result as ObjectResult)?.Value });
+                    errors.Add(new { rodneCislo = zamestnanec.RodneCislo, chyba = (result as ObjectResult)?.Value });
             }
 
             return Ok(new
@@ -94,8 +116,32 @@ namespace KrosUlohaJH.Controllers
                 return (true, new OkObjectResult(existujuci));
             }
 
-            if (!ModelState.IsValid)
+            var contextEdit = new ValidationContext(zamestnanec);
+            var resultsEdit = new List<ValidationResult>();
+            bool isValidEdit = Validator.TryValidateObject(
+                zamestnanec,
+                contextEdit,
+                resultsEdit,
+                validateAllProperties: true
+            );
+
+            if (!isValidEdit)
+            {
+                foreach (var validationResult in resultsEdit)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
+                    }
+                }
+
                 return (false, new BadRequestObjectResult(ModelState));
+            }
+
+
+            // ModelState.IsValid použijem len v prípade ak rovno posielam Objekt triedy nie je DTO
+            //if (!ModelState.IsValid)
+            //    return (false, new BadRequestObjectResult(ModelState));
 
             if (await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email))
                 return (false, new ConflictObjectResult(new { sprava = "Tento email už je zaregistrovaný." }));
@@ -120,8 +166,8 @@ namespace KrosUlohaJH.Controllers
             return Ok(zamestnanec);
         }
 
-        [HttpGet("{rc}")]
-        public async Task<ActionResult<Zamestnanec>> DeleteZamestnanec(string rc)
+        [HttpDelete]
+        public async Task<ActionResult<Zamestnanec>> DeleteZamestnanec([FromQuery] string rc)
         {
             var zamestnanec = await _context.Zamestnanci
                 .FirstOrDefaultAsync(z => z.RodneCislo == rc);
@@ -142,8 +188,16 @@ namespace KrosUlohaJH.Controllers
 
 public class ZamestnanecDto
 {
-    public string? RC { get; set; }
-    public string? Meno { get; set; }
-    public string? Priezvisko { get; set; }
-    public string Titul { get; set; } = string.Empty;
+
+    public  string? RodneCislo { get; set; }
+
+    public  string? Meno { get; set; }
+
+    public  string? Priezvisko { get; set; }
+
+    public string? Email { get; set; }
+    public string? Titul { get; set; } 
+
+    public int? OddelenieId { get; set; }
+
 }
