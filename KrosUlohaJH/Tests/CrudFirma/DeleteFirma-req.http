@@ -1,0 +1,15 @@
+
+
+# @name createZamestnanec
+POST https://localhost:7031/api/zamestnanec
+Content-Type: application/json
+
+{{NewZamestnanec}}
+
+###
+
+# @name deleteUser
+Delete https://localhost:7031/api/zamestnanec?rc={{DeleteZamestnanec}}
+
+
+

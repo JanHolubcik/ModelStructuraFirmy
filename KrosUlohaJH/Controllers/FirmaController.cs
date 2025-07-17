@@ -117,11 +117,17 @@ namespace KrosUlohaJH.Controllers
             {
                 return (false, new ConflictObjectResult(new { sprava = "Firma už existuje" }));
             }
+            var veduciExistuje = await _context.Firmy
+    .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
 
+            if(veduciExistuje)
+            {
+                return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
+            }
             _context.Firmy.Add(Firma);
             await _context.SaveChangesAsync();
 
-            return (true, new CreatedAtActionResult(nameof(GetFirma), "Firma", new { rc = Firma.Kod }, Firma));
+            return (true, new CreatedAtActionResult(nameof(GetFirma), "Firma", new { kod = Firma.Kod }, Firma));
         }
 
 
