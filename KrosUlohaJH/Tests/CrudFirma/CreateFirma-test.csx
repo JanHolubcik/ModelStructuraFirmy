@@ -11,7 +11,7 @@ var newFirma = tp.GetVariable<string>("newFirma");
 dynamic obj = newFirma.ToExpando();
 var kod = obj.kod;
 
-await tp.Test($"Novy zamestnanec by mal mat toto rodne cislo '{kod}' .", async () =>
+await tp.Test($"Firma je vytvorena s timto kodom '{kod}' .", async () =>
 {
     dynamic responseJson = await tp.Responses["getFirma"].GetBodyAsExpandoAsync();
     Console.WriteLine("Raw response: " + responseJson);

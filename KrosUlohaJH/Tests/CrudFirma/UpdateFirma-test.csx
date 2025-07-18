@@ -1,25 +1,18 @@
-tp.Test("Update zamestnanca failne, lebo sa snazim updatnut neexistujuce zamestnanca (400)", () =>
+tp.Test("Updatne alebo vytvory zamestnanca (200)", () =>
 {
     // Access named responses using their names.
-    var statusCode = tp.Responses["updateZamestnanec"].StatusCode();
-    Equal(400, statusCode);
-    tp.Logger.LogInformation("Test prebehol uspesne.");
+    var statusCode = tp.Responses["updateFirma"].StatusCode();
+    Contains(statusCode, new[] { 200, 201 });
+
 });
 
-await tp.Test("Update by mal mat toto cislo v errors 990401/9999 (200)", async () =>
+await tp.Test("Update by mal mat tento kod v errors KR, lebo sa snazim pridat sefa viacerim firmam. ", async () =>
 {
-    dynamic responseJson = await tp.Responses["updateZamestnanecBulk"].GetBodyAsExpandoAsync();
-    string firstErrorRodneCislo = responseJson.chyby[0].rodneCislo;
-    Equal("990401/9999", firstErrorRodneCislo);
+     dynamic responseJson = await tp.Responses["updateFirmaBulk"].GetBodyAsExpandoAsync();
+     string kod = responseJson.chyby[0].kod;
+    Equal("KR", kod);
 
 
- 
+
 });
 
-await tp.Test($"Novy zamestnanec by mal mat toto rodne cislo '{rc}' .", async () =>
-{
-    dynamic responseJson = await tp.Responses["getZamestnanec"].GetBodyAsExpandoAsync();
-
-    // Access JSON properties case-insensitively.
-    Equal(rc, responseJson.RodneCislo);
-});

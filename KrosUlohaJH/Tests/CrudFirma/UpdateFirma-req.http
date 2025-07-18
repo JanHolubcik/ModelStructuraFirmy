@@ -1,36 +1,33 @@
-# @name updateZamestnanec
-POST https://localhost:7031/api/zamestnanec
+# @name updateFirma
+POST https://localhost:7031/api/firma
 Content-Type: application/json
 
-{
-    "RodneCislo": "990401/9999",
-    "Titul": "Mgr.",
-    "OddelenieId": 1
+{ 
+    "Nazov": "SkuskaFirmy",
+    "Kod": "SF",
+    "RiaditelRc": "970215/4567"
 }
 
 
 ###
 
-# @name updateZamestnanecBulk
-POST https://localhost:7031/api/zamestnanec/bulk
+# @name updateFirmaBulk
+POST https://localhost:7031/api/firma/bulk
 Content-Type: application/json
 
 [
-    {
-        "RodneCislo": "990401/9999",
-        "Titul": "Mgr.",
-        "OddelenieId": 1
+     { 
+        "Nazov": "SkuskaFirmy",
+        "Kod": "KR",
+        "RiaditelRc": "970215/4567"
     },
     {
-        "RodneCislo": "990401/4834",
-        "Titul": "Mgr.",
-        "OddelenieId": 1
+        "Nazov": "TakyIstySef",
+        "Kod": "TS",
+        "RiaditelRc": "970215/4567"
     }
 ]
 
 ###
-
-
-
 
 

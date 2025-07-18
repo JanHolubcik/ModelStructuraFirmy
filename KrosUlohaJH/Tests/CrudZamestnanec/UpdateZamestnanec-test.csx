@@ -6,20 +6,18 @@ tp.Test("Update zamestnanca failne, lebo sa snazim updatnut neexistujuce zamestn
     tp.Logger.LogInformation("Test prebehol uspesne.");
 });
 
-await tp.Test("Update by mal mat toto cislo v errors 990401/9999 (200)", async () =>
+await tp.Test("Update by mal mat toto rodne cislo v errors 990401/9999. lebo sa nachadza v databaze (200)", async () =>
 {
     dynamic responseJson = await tp.Responses["updateZamestnanecBulk"].GetBodyAsExpandoAsync();
     string firstErrorRodneCislo = responseJson.chyby[0].rodneCislo;
     Equal("990401/9999", firstErrorRodneCislo);
+    tp.SetVariable("GetRC", firstErrorRodneCislo);
 
 
- 
 });
 
-await tp.Test($"Novy zamestnanec by mal mat toto rodne cislo '{rc}' .", async () =>
-{
-    dynamic responseJson = await tp.Responses["getZamestnanec"].GetBodyAsExpandoAsync();
+var newZamestnanec = tp.GetVariable<string>("NewZamestnanec");
+dynamic obj = newZamestnanec.ToExpando();
+var rc = obj.RodneCislo;
 
-    // Access JSON properties case-insensitively.
-    Equal(rc, responseJson.RodneCislo);
-});
+

@@ -83,6 +83,13 @@ namespace KrosUlohaJH.Controllers
                 if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
                     existujuci.RiaditelRc = Firma.RiaditelRc;
 
+                 var priradenyRiaditel = await _context.Firmy
+                .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
+
+                if (priradenyRiaditel)
+                {
+                    return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
+                }
 
 
                 await _context.SaveChangesAsync();

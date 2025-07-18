@@ -1,15 +1,15 @@
 
 
-# @name createZamestnanec
-POST https://localhost:7031/api/zamestnanec
+# @name createFirma
+POST https://localhost:7031/api/firma
 Content-Type: application/json
 
-{{NewZamestnanec}}
+{{firmaDelete}}
 
 ###
 
-# @name deleteUser
-Delete https://localhost:7031/api/zamestnanec?rc={{DeleteZamestnanec}}
+# @name deleteFirma
+Delete https://localhost:7031/api/firma/{{deleteFirma}}
 
 
 

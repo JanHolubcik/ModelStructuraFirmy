@@ -10,9 +10,10 @@ public class Firma
 
 
 
-Firma FirmaCrud = new Firma { Nazov = "Skusobny", Kod = "SY", RiaditelRc = "940417/8888" };
+Firma FirmaCrud = new Firma { Nazov = "Skusobny", Kod = "SY", RiaditelRc = "920402/0001" };
 
 string kodGet = "SY";
+
 
 
 tp.SetVariable("newFirma", FirmaCrud.ToJsonString());
