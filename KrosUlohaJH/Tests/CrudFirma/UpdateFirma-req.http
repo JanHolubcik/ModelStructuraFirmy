@@ -2,11 +2,7 @@
 POST {{ApiBaseUrl}}/api/firma
 Content-Type: application/json
 
-{ 
-    "Nazov": "SkuskaFirmy",
-    "Kod": "SF",
-    "VeduciRC": "970215/4567"
-}
+{{newFirma}}
 
 
 ###
@@ -18,15 +14,17 @@ Content-Type: application/json
 [
      { 
         "Nazov": "SkuskaFirmy",
-        "Kod": "KR",
+        "Kod": "SO",
         "RiaditelRc": "970215/4567"
     },
     {
         "Nazov": "SkuskaFirmy",
         "Kod": "TS",
-        "VeduciRC": "970215/457"
+        "RiaditelRc": "970215/457"
     }
 ]
 
 ###
 
+# @name getFirma
+Get {{ApiBaseUrl}}/api/firma/{{GetKod}}

@@ -13,3 +13,4 @@ OddelenieTest OddelenieCrud = new OddelenieTest
     ProjektId = 1,
     VeduciOddeleniaRc = "920402/0001"
 };
+FirmaTest FirmaCrud = new FirmaTest { Nazov = "Skusobny", Kod = "SY", RiaditelRc = "920402/0001" };

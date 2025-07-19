@@ -1,18 +1,10 @@
-﻿using System.Diagnostics;
+﻿#load "$teapie/Definitions/CrudtestData.csx"
 
-public class Firma
-{
-    public int Id { get; set; }
-    public required string Nazov { get; set; }
-    public required string Kod { get; set; }
-    public string? RiaditelRc { get; set; }
-}
+
+string kodGet = FirmaCrud.Kod;
 
 
 
-Firma FirmaCrud = new Firma { Nazov = "Skusobny", Kod = "SY", RiaditelRc = "920402/0001" };
-
-string kodGet = "SY";
 
 
 

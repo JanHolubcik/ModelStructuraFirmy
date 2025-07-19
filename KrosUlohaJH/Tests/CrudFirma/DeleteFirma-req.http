@@ -4,12 +4,15 @@
 POST {{ApiBaseUrl}}/api/firma
 Content-Type: application/json
 
-{{firmaDelete}}
+{{newFirma}}
 
 ###
 
 # @name deleteFirma
-Delete {{ApiBaseUrl}}/api/firma/{{deleteFirma}}
+Delete {{ApiBaseUrl}}/api/firma/{{GetFirma}}
 
+###
+# @name getFirma
+GET {{ApiBaseUrl}}/api/firma/{{GetFirma}}
 
 
