@@ -1,0 +1,13 @@
+# @name createDivizia
+POST https://localhost:7031/api/divizia
+Content-Type: application/json
+
+{{newDivizia}}
+
+###
+
+# @name getDivizia
+GET https://localhost:7031/api/divizia/{{GetKod}}
+
+
+

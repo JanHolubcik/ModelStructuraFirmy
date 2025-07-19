@@ -74,8 +74,22 @@ namespace KrosUlohaJH.Controllers
         private async Task<(bool success, ActionResult response)> CreateOrUpdate(Divizia Divizia)
         {
 
+
+            if (!string.IsNullOrWhiteSpace(Divizia.VeduciRC))
+            {
+                // If provided, check if it exists in Zamestnanci
+                var exists = await _context.Zamestnanci
+                    .AnyAsync(z => z.RodneCislo == Divizia.VeduciRC);
+
+                if (!exists)
+                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
+            }
+
+
             var existujuci = await _context.Divizie
                 .FirstOrDefaultAsync(z => z.Kod == Divizia.Kod);
+
+
 
             if (existujuci != null)
             {
@@ -128,10 +142,12 @@ namespace KrosUlohaJH.Controllers
                 return (false, new ConflictObjectResult(new { sprava = "Divizia už existuje" }));
             }
 
+
+
             _context.Divizie.Add(Divizia);
             await _context.SaveChangesAsync();
 
-            return (true, new CreatedAtActionResult(nameof(GetDivizia), "Divizia", new { rc = Divizia.Kod }, Divizia));
+            return (true, new CreatedAtActionResult(nameof(GetDivizia), "Divizia", new { kod = Divizia.Kod }, Divizia));
         }
 
         [HttpGet("{kod}")]

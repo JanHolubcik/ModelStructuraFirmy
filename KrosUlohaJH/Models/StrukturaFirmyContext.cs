@@ -12,7 +12,7 @@ namespace KrosUlohaJH.Models
         public DbSet<Zamestnanec> Zamestnanci { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //môže byť len jeden majiteľ firmy
+            //môže byť len jeden unikátny majiteľ firmy
             modelBuilder.Entity<Firma>()
                 .HasOne(f => f.Riaditel)
                 .WithOne() 
@@ -25,12 +25,12 @@ namespace KrosUlohaJH.Models
                .WithMany(f => f.Divizie)
                .HasForeignKey(d => d.FirmaId);
 
-            //môže byť len jeden vedúci divízie
+            //môže byť len jeden vedúci divízie, môže mať nastarosti viacero divízii
             modelBuilder.Entity<Divizia>()
-                .HasOne(d => d.Veduci)
-                .WithOne()
-                .HasForeignKey<Divizia>(d => d.VeduciRC)
-                .HasPrincipalKey<Zamestnanec>(z => z.RodneCislo);
+         .HasOne(d => d.Veduci)
+         .WithMany(z => z.VedeneDivizie) 
+         .HasForeignKey(d => d.VeduciRC)
+         .HasPrincipalKey(z => z.RodneCislo);
 
             //projekt môže mať len jednu divíziu, jedna divízia môže mať viacero projektov 
             modelBuilder.Entity<Projekt>()

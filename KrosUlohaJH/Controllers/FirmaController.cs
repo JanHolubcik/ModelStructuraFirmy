@@ -69,6 +69,17 @@ namespace KrosUlohaJH.Controllers
             var existujuci = await _context.Firmy
                 .FirstOrDefaultAsync(z => z.Kod == Firma.Kod);
 
+
+            if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
+            {
+                // If provided, check if it exists in Zamestnanci
+                var exists = await _context.Zamestnanci
+                    .AnyAsync(z => z.RodneCislo == Firma.RiaditelRc);
+
+                if (!exists)
+                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
+            }
+
             if (existujuci != null)
             {
 

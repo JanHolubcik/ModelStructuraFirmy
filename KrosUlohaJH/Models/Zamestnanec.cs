@@ -28,6 +28,6 @@ namespace KrosUlohaJH.Models
         [ForeignKey(nameof(Oddelenie))]
         public int? OddelenieId { get; set; }
         public Oddelenie? Oddelenie { get; set; } //? znamená, že môže byť null
-
+        public ICollection<Divizia>? VedeneDivizie { get; set; }
     }
 }

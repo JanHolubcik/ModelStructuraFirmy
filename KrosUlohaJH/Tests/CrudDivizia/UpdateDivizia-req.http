@@ -1,0 +1,33 @@
+# @name updateFirma
+POST https://localhost:7031/api/divizia
+Content-Type: application/json
+
+{ 
+    "Nazov": "SkuskaFirmy",
+    "Kod": "SF",
+    "VeduciRC": "970215/4567"
+}
+
+
+###
+
+# @name updateFirmaBulk
+POST https://localhost:7031/api/divizia/bulk
+Content-Type: application/json
+
+[
+     { 
+        "Nazov": "SkuskaFirmy",
+        "Kod": "KR",
+        "RiaditelRc": "970215/4567"
+    },
+    {
+        "Nazov": "SkuskaFirmy",
+        "Kod": "TS",
+        "VeduciRC": "970215/457"
+    }
+]
+
+###
+
+

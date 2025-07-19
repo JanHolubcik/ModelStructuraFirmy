@@ -66,6 +66,16 @@ namespace KrosUlohaJH.Controllers
 
         private async Task<(bool success, ActionResult response)> CreateOrUpdate(Projekt Projekt)
         {
+            if (!string.IsNullOrWhiteSpace(Projekt.VeduciProjektuRC))
+            {
+                // If provided, check if it exists in Zamestnanci
+                var exists = await _context.Zamestnanci
+                    .AnyAsync(z => z.RodneCislo == Projekt.VeduciProjektuRC);
+
+                if (!exists)
+                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
+            }
+
 
             var existujuci = await _context.Projekty
                 .FirstOrDefaultAsync(z => z.Kod == Projekt.Kod);
