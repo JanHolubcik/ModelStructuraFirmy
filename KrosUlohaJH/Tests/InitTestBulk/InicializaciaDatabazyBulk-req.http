@@ -1,5 +1,5 @@
 # @name newOddeleniaBulk
-POST {{ApiBaseUrl}}/api/oddelenia/bulk
+POST {{ApiBaseUrl}}/api/oddelenie/bulk
 Content-Type: application/json
 
 {{Newoddelenia}}
@@ -38,7 +38,7 @@ Content-Type: application/json
 ###
 
 # @name NewOddeleniaRCBulk
-POST {{ApiBaseUrl}}/api/oddelenia/bulk
+POST {{ApiBaseUrl}}/api/oddelenie/bulk
 Content-Type: application/json
 
 {{NewoddeleniaRC}}

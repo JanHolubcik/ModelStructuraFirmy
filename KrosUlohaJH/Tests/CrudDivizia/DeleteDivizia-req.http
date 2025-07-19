@@ -11,3 +11,9 @@ Content-Type: application/json
 # @name deleteDivizia
 Delete {{ApiBaseUrl}}/api/divizia/{{GetKod}}
 
+###
+
+# @name getDivizia
+Get {{ApiBaseUrl}}/api/divizia/{{GetKod}}
+
+

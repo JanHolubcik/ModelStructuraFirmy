@@ -8,5 +8,6 @@ await tp.Test("Vymaz firmu  (200)", async () =>
 {
     var statusCode = tp.Responses["deleteDivizia"].StatusCode();
     var statusCodeGet = tp.Responses["getDivizia"].StatusCode();
+    Equal(200, statusCode);
     Equal(404, statusCodeGet);
 });

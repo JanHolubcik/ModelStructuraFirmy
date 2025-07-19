@@ -6,13 +6,29 @@ tp.Test("Updatne alebo vytvory zamestnanca (200)", () =>
 
 });
 
- await tp.Test("Update by mal mat tento kod v errors SO2, lebo rodne cislo je v zlom formate. ", async () =>
+var newFirma = tp.GetVariable<string>("newOddelenie");
+dynamic obj = newFirma.ToExpando();
+var kod = obj.Kod;
+var Nazov = obj.Nazov;
+var ProjektId = obj.ProjektId;
+var VeduciOddeleniaRc = obj.VeduciOddeleniaRc;
+
+await tp.Test("Update by mal mat tento kod v errors SO2, lebo rodne cislo je v zlom formate. ", async () =>
 {
-    dynamic responseJson = await tp.Responses["updateOddelenieBulk"].GetBodyAsExpandoAsync();
-    string kod = responseJson.chyby[0].kod;
+    dynamic responseJsonBulk = await tp.Responses["updateOddelenieBulk"].GetBodyAsExpandoAsync();
+    dynamic responseJsonNew = await tp.Responses["getOddelenie"].GetBodyAsExpandoAsync();
 
-    Equal("SO2", kod);
-   // var statusCode = tp.Responses["updateProjekt"].StatusCode();
 
+    var uspesne = responseJsonBulk.uspesne;
+    var neuspesne = responseJsonBulk.neuspesne;
+
+    Equal(kod, responseJsonNew.Kod);
+    NotEqual(Nazov, responseJsonNew.Nazov);
+    NotEqual(ProjektId, Convert.ToInt64(responseJsonNew.ProjektId));
+
+    NotEqual(VeduciOddeleniaRc, responseJsonNew.VeduciOddeleniaRc);
+
+    Equal(1L, Convert.ToInt64(uspesne));
+    Equal(1L, Convert.ToInt64(neuspesne));
 });
 

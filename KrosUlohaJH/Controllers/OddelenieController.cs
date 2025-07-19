@@ -8,30 +8,50 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OddeleniaController : ControllerBase
+    public class OddelenieController : ControllerBase
     {
         private readonly StrukturaFirmyContext _context;
 
-        public OddeleniaController(StrukturaFirmyContext context)
+        public OddelenieController(StrukturaFirmyContext context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Divizia>> PostOrUpdateOddelenie(Oddelenie Oddelenie)
-        {  
-                var (success, result) = await CreateOrUpdate(Oddelenie);
+        public async Task<ActionResult<Oddelenie>> PostOrUpdateOddelenie(OddeleniaDto OddelenieDto)
+        {
+            var Oddelenie = new Oddelenie
+            {
+                Kod = OddelenieDto.Kod,
+                ProjektId = OddelenieDto.ProjektId,
+                Nazov = OddelenieDto.Nazov,
+                VeduciOddeleniaRc = OddelenieDto.VeduciOddeleniaRc,
+
+
+            };
+
+            var (success, result) = await CreateOrUpdate(Oddelenie);
                 return result;
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkOddelenia([FromBody] List<Oddelenie> Oddelenia)
+        public async Task<IActionResult> PostBulkOddelenia([FromBody] List<OddeleniaDto> Oddelenia)
         {
             var errors = new List<object>();
             var success = new List<Oddelenie>();
 
-            foreach (var z in Oddelenia)
+            foreach (var OddelenieDto in Oddelenia)
             {
+
+                var z = new Oddelenie
+                {
+                    Kod = OddelenieDto.Kod,
+                    ProjektId = OddelenieDto.ProjektId,
+                    Nazov = OddelenieDto.Nazov,
+                    VeduciOddeleniaRc = OddelenieDto.VeduciOddeleniaRc,
+
+
+                };
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Oddelenie zam)
@@ -118,7 +138,7 @@ namespace KrosUlohaJH.Controllers
             _context.Oddelenia.Add(Oddelenie);
             await _context.SaveChangesAsync();
 
-            return (true, new CreatedAtActionResult(nameof(GetOddelenie), "Oddelenie", new { rc = Oddelenie.Kod }, Oddelenie));
+            return (true, new CreatedAtActionResult(nameof(GetOddelenie), "Oddelenie", new { kod = Oddelenie.Kod }, Oddelenie));
         }
 
         [HttpGet("{kod}")]
@@ -131,6 +151,8 @@ namespace KrosUlohaJH.Controllers
                 {
                     Kod = d.Kod,
                     Nazov = d.Nazov,
+                    ProjektId = d.ProjektId,
+                    VeduciOddeleniaRc = d.VeduciOddeleniaRc,
                     Zamestnanci = d.Zamestnanci.Select(p => new ZamestnanecDto
                     {
                         Meno = p.Meno,
@@ -172,5 +194,8 @@ public class OddeleniaDto
 {
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
+
+    public int? ProjektId { get; set; }
+    public string? VeduciOddeleniaRc { get; set; }
     public List<ZamestnanecDto>? Zamestnanci { get; set; }
 }

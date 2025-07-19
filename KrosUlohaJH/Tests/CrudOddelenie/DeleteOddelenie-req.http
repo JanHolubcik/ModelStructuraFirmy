@@ -1,15 +1,20 @@
 
 
 # @name createOddelenie
-POST {{ApiBaseUrl}}/api/oddelenia
+POST {{ApiBaseUrl}}/api/oddelenie
 Content-Type: application/json
 
-{{deleteOddelenie}}
+{{newOddelenie}}
 
 ###
 
 # @name deleteOddelenie
-Delete {{ApiBaseUrl}}/api/oddelenia/{{GetKod}}
+Delete {{ApiBaseUrl}}/api/oddelenie/{{GetKod}}
+
+###
+
+# @name getOddelenie
+GET {{ApiBaseUrl}}/api/oddelenie/{{GetKod}}
 
 
 

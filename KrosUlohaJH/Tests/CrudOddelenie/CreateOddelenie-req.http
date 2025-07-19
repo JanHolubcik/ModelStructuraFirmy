@@ -1,5 +1,5 @@
 # @name createOddelenie
-POST {{ApiBaseUrl}}/api/oddelenia
+POST {{ApiBaseUrl}}/api/oddelenie
 Content-Type: application/json
 
 {{newOddelenie}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name getOddelenie
-GET {{ApiBaseUrl}}/api/oddelenia/{{GetKod}}
+GET {{ApiBaseUrl}}/api/oddelenie/{{GetKod}}
 
 
 

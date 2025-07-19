@@ -1,27 +1,22 @@
 # @name updateOddelenie
-POST {{ApiBaseUrl}}/api/oddelenia
+POST {{ApiBaseUrl}}/api/oddelenie
 Content-Type: application/json
 
-{
-  "Nazov": "Skusobne oddelenie",
-  "Kod": "SO",
-  "ProjektId": 1,
-  "VeduciOddeleniaRc": "920402/0001"
-}
+{{newOddelenie}}
 
 
 ###
 
 # @name updateOddelenieBulk
-POST {{ApiBaseUrl}}/api/oddelenia/bulk
+POST {{ApiBaseUrl}}/api/oddelenie/bulk
 Content-Type: application/json
 
 [
 {
   "Nazov": "Skusobne oddelenie zmenene",
   "Kod": "SO",
-  "ProjektId": 1,
-  "VeduciOddeleniaRc": "920402/0001"
+  "ProjektId": 2,
+  "VeduciOddeleniaRc": "900228/8888"
 },
  {
   "Nazov": "Skusobne oddelenie 2",
@@ -30,3 +25,8 @@ Content-Type: application/json
   "VeduciOddeleniaRc": "920402/000"
 }
 ]
+
+###
+
+# @name getOddelenie
+Get {{ApiBaseUrl}}/api/oddelenie/{{GetKod}}
