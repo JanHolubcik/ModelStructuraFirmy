@@ -1,5 +1,5 @@
 # @name createFirma
-POST https://localhost:7031/api/firma
+POST {{ApiBaseUrl}}/api/firma
 Content-Type: application/json
 
 {{newFirma}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name getFirma
-GET https://localhost:7031/api/firma/{{GetFirma}}
+GET {{ApiBaseUrl}}/api/firma/{{GetFirma}}
 
 
 

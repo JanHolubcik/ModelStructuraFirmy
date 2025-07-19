@@ -1,120 +1,68 @@
-﻿public class Oddelenie
+#load "C:\Users\janho\source\repos\KrosUlohaJH\KrosUlohaJH\Tests\.teapie\cache\temp\InicializaciaDatabazyBulk-6718f60bfca94967bd03818872d3ec74\.teapie\Definitions\Firma.csx"
+#load "C:\Users\janho\source\repos\KrosUlohaJH\KrosUlohaJH\Tests\.teapie\cache\temp\InicializaciaDatabazyBulk-6718f60bfca94967bd03818872d3ec74\.teapie\Definitions\Divizia.csx"
+#load "C:\Users\janho\source\repos\KrosUlohaJH\KrosUlohaJH\Tests\.teapie\cache\temp\InicializaciaDatabazyBulk-6718f60bfca94967bd03818872d3ec74\.teapie\Definitions\Oddelenie.csx"
+#load "C:\Users\janho\source\repos\KrosUlohaJH\KrosUlohaJH\Tests\.teapie\cache\temp\InicializaciaDatabazyBulk-6718f60bfca94967bd03818872d3ec74\.teapie\Definitions\Projekt.csx"
+#load "C:\Users\janho\source\repos\KrosUlohaJH\KrosUlohaJH\Tests\.teapie\cache\temp\InicializaciaDatabazyBulk-6718f60bfca94967bd03818872d3ec74\.teapie\Definitions\Zamestnanec.csx"
+var Firmy = new List<FirmaTest>
 {
-    public int Id { get; set; }
-    public required string Nazov { get; set; }
-    public required string Kod { get; set; }
-    public int? ProjektId { get; set; }
-    public string? VeduciOddeleniaRc { get; set; }
-}
-
-public class Zamestnanec
-{
-    public int Id { get; set; }
-    public string RodneCislo { get; set; }
-    public string Meno { get; set; }
-    public string Priezvisko { get; set; }
-    public string Email { get; set; }
-    public string Titul { get; set; }
-    public int? OddelenieId { get; set; }
-}
-
-public class Projekt
-{
-    public int Id { get; set; }
-    public required string Nazov { get; set; }
-    public required string Kod { get; set; }
-    public int DiviziaId { get; set; }
-    public string? VeduciProjektuRC { get; set; }
-}
-
-public class Firma
-{
-    public int Id { get; set; }
-    public required string Nazov { get; set; }
-    public required string Kod { get; set; }
-    public string? RiaditelRc { get; set; }
-}
-
-public class Divizia
-{
-    public int Id { get; set; }
-    public required string Nazov { get; set; }
-    public required string Kod { get; set; }
-
-    public int? FirmaId { get; set; }
-    public Firma? Firma { get; set; }
-
-    public string? VeduciRC { get; set; }
-    public Zamestnanec? Veduci { get; set; } //null! potlačí warning, že je null
-
-}
-
-var Firmy = new List<Firma>
-{
-    new Firma { Nazov = "Kros", Kod = "KR",RiaditelRc = "900101/1234"},
-    new Firma {  Nazov = "Vúb Banka", Kod = "VUB",RiaditelRc = "890315/5678"},
+    new FirmaTest { Nazov = "Kros", Kod = "KR",RiaditelRc = "900101/1234"},
+    new FirmaTest {  Nazov = "Vúb Banka", Kod = "VUB",RiaditelRc = "890315/5678"},
 };
-
-
-var Divizie = new List<Divizia>
+var Divizie = new List<DiviziaTest>
 {
-    new Divizia {  Nazov = "Žilina", Kod = "KR",VeduciRC = "900101/1234",FirmaId = 1},
-    new Divizia {  Nazov = "Bratislava", Kod = "KRBR",VeduciRC = "981231/1234", FirmaId = 1},
-    new Divizia {  Nazov = "Vúb Banka", Kod = "VUB",VeduciRC = "890315/5678",FirmaId = 2},
+    new DiviziaTest {  Nazov = "Žilina", Kod = "KR",VeduciRC = "900101/1234",FirmaId = 1},
+    new DiviziaTest {  Nazov = "Bratislava", Kod = "KRBR",VeduciRC = "981231/1234", FirmaId = 1},
+    new DiviziaTest {  Nazov = "Vúb Banka", Kod = "VUB",VeduciRC = "890315/5678",FirmaId = 2},
 };
-
-
-var oddelenia = new List<Oddelenie>
+var oddelenia = new List<OddelenieTest>
 {
-    new Oddelenie {  Nazov = "Informačné technológie", Kod = "IT"},
-    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR",  },
-    new Oddelenie {  Nazov = "Marketing", Kod = "MKT",  },
-    new Oddelenie {  Nazov = "Financie", Kod = "FIN",  },
-    new Oddelenie {  Nazov = "Predajcovia", Kod = "PRE"},
+    new OddelenieTest {  Nazov = "Informačné technológie", Kod = "IT"},
+    new OddelenieTest {  Nazov = "Ľudské zdroje", Kod = "HR",  },
+    new OddelenieTest {  Nazov = "Marketing", Kod = "MKT",  },
+    new OddelenieTest {  Nazov = "Financie", Kod = "FIN",  },
+    new OddelenieTest {  Nazov = "Predajcovia", Kod = "PRE"},
 };
-var oddeleniaWithRC = new List<Oddelenie>
+var oddeleniaWithRC = new List<OddelenieTest>
 {
-    new Oddelenie {  Nazov = "Informačné technológie", Kod = "IT",ProjektId=1, VeduciOddeleniaRc ="920402/0001"},
-    new Oddelenie {  Nazov = "Ľudské zdroje", Kod = "HR",ProjektId=2, VeduciOddeleniaRc ="950125/0002" },
-    new Oddelenie {  Nazov = "Marketing", Kod = "MKT", ProjektId=3, VeduciOddeleniaRc ="920507/1111"  },
-    new Oddelenie {  Nazov = "Financie", Kod = "FIN", ProjektId=4, VeduciOddeleniaRc ="900228/8888" },
-    new Oddelenie {  Nazov = "Predajcovia", Kod = "PRE",ProjektId=2, VeduciOddeleniaRc ="890120/0006" },
+    new OddelenieTest {  Nazov = "Informačné technológie", Kod = "IT",ProjektId=1, VeduciOddeleniaRc ="920402/0001"},
+    new OddelenieTest {  Nazov = "Ľudské zdroje", Kod = "HR",ProjektId=2, VeduciOddeleniaRc ="950125/0002" },
+    new OddelenieTest {  Nazov = "Marketing", Kod = "MKT", ProjektId=3, VeduciOddeleniaRc ="920507/1111"  },
+    new OddelenieTest {  Nazov = "Financie", Kod = "FIN", ProjektId=4, VeduciOddeleniaRc ="900228/8888" },
+    new OddelenieTest {  Nazov = "Predajcovia", Kod = "PRE",ProjektId=2, VeduciOddeleniaRc ="890120/0006" },
 };
 //Zeditujem si oddelenia po tom ako pridám používateľov, potom môžem postupne pridávať aj projekty atď. aby 
 //som nemusel znova pridávať cudzie kľúče.
-
-var projekty = new List<Projekt>
+var projekty = new List<ProjektTest>
 {
-    new Projekt
+    new ProjektTest
     {
         Nazov = "Projekt Orion",
         Kod = "PRJ-ORION",
         DiviziaId = 1,
         VeduciProjektuRC ="870927/4444"
     },
-    new Projekt
+    new ProjektTest
     {
         Nazov = "Projekt Apollo",
         Kod = "PRJ-APOLLO",
         DiviziaId = 2,
         VeduciProjektuRC ="930303/5555"
-
     },
-    new Projekt
+    new ProjektTest
     {
         Nazov = "Projekt Titan",
         Kod = "PRJ-TITAN",
         DiviziaId = 1,
         VeduciProjektuRC ="950709/7777"
     },
-    new Projekt
+    new ProjektTest
     {
         Nazov = "Projekt Mercury",
         Kod = "PRJ-MERC",
         DiviziaId = 2,
         VeduciProjektuRC ="860116/6666"
     },
-    new Projekt
+    new ProjektTest
     {
         Nazov = "Projekt Atlas",
         Kod = "PRJ-ATLAS",
@@ -122,11 +70,9 @@ var projekty = new List<Projekt>
         VeduciProjektuRC ="910812/3333"
     }
 };
-
-
-var zamestnanci = new List<Zamestnanec>
+var zamestnanci = new List<ZamestnanecTest>
 {
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "900101/1234",
         Meno = "Jana",
@@ -135,7 +81,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Mgr.",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "890315/5678",
         Meno = "Peter",
@@ -144,7 +90,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "920507/1111",
         Meno = "Lucia",
@@ -153,7 +99,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Ing.",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "850201/2222",
         Meno = "Marek",
@@ -162,7 +108,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = null
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "910812/3333",
         Meno = "Anna",
@@ -171,7 +117,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Bc.",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "870927/4444",
         Meno = "Juraj",
@@ -180,7 +126,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "930303/5555",
         Meno = "Zuzana",
@@ -189,7 +135,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "860116/6666",
         Meno = "Tomáš",
@@ -198,7 +144,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "950709/7777",
         Meno = "Monika",
@@ -207,7 +153,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "900228/8888",
         Meno = "Martin",
@@ -216,7 +162,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Mgr.",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "910101/9999",
         Meno = "Simona",
@@ -225,7 +171,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "920402/0001",
         Meno = "Dominik",
@@ -234,7 +180,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "880313/0002",
         Meno = "Veronika",
@@ -243,7 +189,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = null
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "870714/0003",
         Meno = "Andrej",
@@ -252,7 +198,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "PhDr.",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "900408/0004",
         Meno = "Barbora",
@@ -261,7 +207,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "930926/0005",
         Meno = "Filip",
@@ -270,7 +216,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Bc.",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "890120/0006",
         Meno = "Lenka",
@@ -279,7 +225,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "950510/0007",
         Meno = "Matej",
@@ -288,7 +234,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Ing.",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "880216/0008",
         Meno = "Kristína",
@@ -297,7 +243,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "900703/0009",
         Meno = "Róbert",
@@ -306,7 +252,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "870812/0010",
         Meno = "Ivana",
@@ -315,7 +261,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "890130/0011",
         Meno = "Michal",
@@ -324,7 +270,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "910912/0012",
         Meno = "Dana",
@@ -333,7 +279,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Mgr.",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "950423/0013",
         Meno = "Emil",
@@ -342,7 +288,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "940620/0014",
         Meno = "Soňa",
@@ -351,7 +297,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "910101/0001",
         Meno = "Ján",
@@ -360,7 +306,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Ing.",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "880305/1234",
         Meno = "Lucia",
@@ -369,7 +315,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "970215/4567",
         Meno = "Peter",
@@ -378,7 +324,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Mgr.",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "850610/7890",
         Meno = "Mária",
@@ -387,7 +333,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "930101/1111",
         Meno = "Róbert",
@@ -396,7 +342,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Bc.",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "890512/2222",
         Meno = "Eva",
@@ -405,7 +351,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "860823/3333",
         Meno = "Tomáš",
@@ -414,7 +360,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Ing.",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "950307/4444",
         Meno = "Zuzana",
@@ -423,7 +369,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 3
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "920102/5555",
         Meno = "Michal",
@@ -432,7 +378,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Mgr.",
         OddelenieId = 4
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "870918/6666",
         Meno = "Andrea",
@@ -441,7 +387,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 5
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "990321/7777",
         Meno = "Martin",
@@ -450,7 +396,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Bc.",
         OddelenieId = null
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "940417/8888",
         Meno = "Kristína",
@@ -459,7 +405,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = 1
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "930908/9999",
         Meno = "Samuel",
@@ -468,7 +414,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "Ing.",
         OddelenieId = 2
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "950125/0002",
         Meno = "Tatiana",
@@ -477,7 +423,7 @@ var zamestnanci = new List<Zamestnanec>
         Titul = "",
         OddelenieId = null
     },
-    new Zamestnanec
+    new ZamestnanecTest
     {
         RodneCislo = "981231/1234",
         Meno = "Igor",
@@ -487,10 +433,3 @@ var zamestnanci = new List<Zamestnanec>
         OddelenieId = 5
     }
 };
-
-tp.SetVariable("NewProjekty", projekty.ToJsonString(), "projekt");
-tp.SetVariable("NewDivizie", Divizie.ToJsonString(), "divizie");
-tp.SetVariable("NewFirmy", Firmy.ToJsonString(), "firmy");
-tp.SetVariable("Newoddelenia", oddelenia.ToJsonString(), "oddelenia");
-tp.SetVariable("NewoddeleniaRC", oddeleniaWithRC.ToJsonString(), "oddeleniaRC");
-tp.SetVariable("NewZamestnanci", zamestnanci.ToJsonString(), "zamestnanci");

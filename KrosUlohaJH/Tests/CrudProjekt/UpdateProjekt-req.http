@@ -1,5 +1,5 @@
 # @name updateProjekt
-POST https://localhost:7031/api/projekt
+POST {{ApiBaseUrl}}/api/projekt
 Content-Type: application/json
 
 { 
@@ -12,7 +12,7 @@ Content-Type: application/json
 ###
 
 # @name updateProjektBulk
-POST https://localhost:7031/api/projekt/bulk
+POST {{ApiBaseUrl}}/api/projekt/bulk
 Content-Type: application/json
 
 [

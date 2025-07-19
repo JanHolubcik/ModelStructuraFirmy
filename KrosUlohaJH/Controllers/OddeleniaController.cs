@@ -51,12 +51,15 @@ namespace KrosUlohaJH.Controllers
         private async Task<(bool success, ActionResult response)> CreateOrUpdate(Oddelenie Oddelenie)
         {
 
-            bool exists = await _context.Zamestnanci
-                 .AnyAsync(z => z.RodneCislo == Oddelenie.VeduciOddeleniaRc);
 
-            if (!exists)
+            if (!string.IsNullOrWhiteSpace(Oddelenie.VeduciOddeleniaRc))
             {
-                return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
+                // If provided, check if it exists in Zamestnanci
+                var exists = await _context.Zamestnanci
+                    .AnyAsync(z => z.RodneCislo == Oddelenie.VeduciOddeleniaRc);
+
+                if (!exists)
+                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
             }
 
             var existujuci = await _context.Oddelenia

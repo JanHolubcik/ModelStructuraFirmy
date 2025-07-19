@@ -1,0 +1,15 @@
+
+
+# @name createOddelenie
+POST {{ApiBaseUrl}}/api/oddelenia
+Content-Type: application/json
+
+{{deleteOddelenie}}
+
+###
+
+# @name deleteOddelenie
+Delete {{ApiBaseUrl}}/api/oddelenia/{{GetKod}}
+
+
+

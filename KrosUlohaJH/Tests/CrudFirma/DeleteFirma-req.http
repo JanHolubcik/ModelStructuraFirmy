@@ -1,7 +1,7 @@
 
 
 # @name createFirma
-POST https://localhost:7031/api/firma
+POST {{ApiBaseUrl}}/api/firma
 Content-Type: application/json
 
 {{firmaDelete}}
@@ -9,7 +9,7 @@ Content-Type: application/json
 ###
 
 # @name deleteFirma
-Delete https://localhost:7031/api/firma/{{deleteFirma}}
+Delete {{ApiBaseUrl}}/api/firma/{{deleteFirma}}
 
 
 

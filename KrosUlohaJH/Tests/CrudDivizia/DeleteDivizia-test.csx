@@ -10,9 +10,9 @@ tp.Test("Vytvor firmu. (200)", () =>
 await tp.Test("Vymaz firmu  (200)", async () =>
 {
     var statusCode = tp.Responses["deleteDivizia"].StatusCode();
-
+    var statusCodeGet = tp.Responses["getDivizia"].StatusCode();
     Equal(200, statusCode);
-    tp.Logger.LogInformation("Test prebehol uspesne.");
+    Equal(404, statusCodeGet);
 });
 
 

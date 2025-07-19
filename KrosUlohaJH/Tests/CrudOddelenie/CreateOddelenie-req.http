@@ -1,0 +1,13 @@
+# @name createOddelenie
+POST {{ApiBaseUrl}}/api/oddelenia
+Content-Type: application/json
+
+{{newOddelenie}}
+
+###
+
+# @name getOddelenie
+GET {{ApiBaseUrl}}/api/oddelenia/{{GetKod}}
+
+
+

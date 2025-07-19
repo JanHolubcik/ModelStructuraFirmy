@@ -1,7 +1,7 @@
 
 
 # @name createDivizia
-POST https://localhost:7031/api/divizia
+POST {{ApiBaseUrl}}/api/divizia
 Content-Type: application/json
 
 {{newDivizia}}
@@ -9,7 +9,5 @@ Content-Type: application/json
 ###
 
 # @name deleteDivizia
-Delete https://localhost:7031/api/divizia/{{GetKod}}
-
-
+Delete {{ApiBaseUrl}}/api/divizia/{{GetKod}}
 

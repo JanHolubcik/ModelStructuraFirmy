@@ -1,0 +1,32 @@
+# @name updateOddelenie
+POST {{ApiBaseUrl}}/api/oddelenia
+Content-Type: application/json
+
+{
+  "Nazov": "Skusobne oddelenie",
+  "Kod": "SO",
+  "ProjektId": 1,
+  "VeduciOddeleniaRc": "920402/0001"
+}
+
+
+###
+
+# @name updateOddelenieBulk
+POST {{ApiBaseUrl}}/api/oddelenia/bulk
+Content-Type: application/json
+
+[
+{
+  "Nazov": "Skusobne oddelenie zmenene",
+  "Kod": "SO",
+  "ProjektId": 1,
+  "VeduciOddeleniaRc": "920402/0001"
+},
+ {
+  "Nazov": "Skusobne oddelenie 2",
+  "Kod": "SO2",
+  "ProjektId": 1,
+  "VeduciOddeleniaRc": "920402/000"
+}
+]

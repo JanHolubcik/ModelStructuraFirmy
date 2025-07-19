@@ -1,27 +1,21 @@
 # @name updateDivizia
-POST https://localhost:7031/api/divizia
+POST {{ApiBaseUrl}}/api/divizia
 Content-Type: application/json
 
-{  
-    "Nazov": "Csob Banka", 
-    "Kod": "CSOB",
-    "VeduciRC": "890315/5678",
-    "FirmaId": "2"
-}
-
+{{newDivizia}}
 
 ###
 
 # @name updateDiviziaBulk
-POST https://localhost:7031/api/divizia/bulk
+POST {{ApiBaseUrl}}/api/divizia/bulk
 Content-Type: application/json
 
 [
     {  
-        "Nazov": "Csob Banka", 
-        "Kod": "CSOB",
-        "VeduciRC": "890315/5678",
-        "FirmaId": "2"
+        "Nazov": "Banka Csob", 
+        "Kod": "KS",
+        "VeduciRC": "850201/2222",
+        "FirmaId": "1"
     },
     {  
         "Nazov": "Skuska Banka", 
@@ -33,5 +27,8 @@ Content-Type: application/json
 
 ###
 
+###
 
+# @name getDivizia
+Get {{ApiBaseUrl}}/api/divizia/{{GetKod}}
 

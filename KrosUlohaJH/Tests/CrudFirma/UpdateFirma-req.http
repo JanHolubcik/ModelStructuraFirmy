@@ -1,5 +1,5 @@
 # @name updateFirma
-POST https://localhost:7031/api/firma
+POST {{ApiBaseUrl}}/api/firma
 Content-Type: application/json
 
 { 
@@ -12,7 +12,7 @@ Content-Type: application/json
 ###
 
 # @name updateFirmaBulk
-POST https://localhost:7031/api/firma/bulk
+POST {{ApiBaseUrl}}/api/firma/bulk
 Content-Type: application/json
 
 [

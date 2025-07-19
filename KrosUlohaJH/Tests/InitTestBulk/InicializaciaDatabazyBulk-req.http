@@ -1,5 +1,5 @@
 # @name newOddeleniaBulk
-POST https://localhost:7031/api/oddelenia/bulk
+POST {{ApiBaseUrl}}/api/oddelenia/bulk
 Content-Type: application/json
 
 {{Newoddelenia}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name newZamestnanecBulk
-POST https://localhost:7031/api/zamestnanec/bulk
+POST {{ApiBaseUrl}}/api/zamestnanec/bulk
 Content-Type: application/json
 
 {{NewZamestnanci}}
@@ -15,7 +15,7 @@ Content-Type: application/json
 ###
 
 # @name NewFirmyBulk
-POST https://localhost:7031/api/firma/bulk
+POST {{ApiBaseUrl}}/api/firma/bulk
 Content-Type: application/json
 
 {{NewFirmy}}
@@ -23,7 +23,7 @@ Content-Type: application/json
 ###
 
 # @name NewDivizieBulk
-POST https://localhost:7031/api/divizia/bulk
+POST {{ApiBaseUrl}}/api/divizia/bulk
 Content-Type: application/json
 
 {{NewDivizie}}
@@ -31,14 +31,14 @@ Content-Type: application/json
 ###
 
 # @name NewProjektyBulk
-POST https://localhost:7031/api/projekt/bulk
+POST {{ApiBaseUrl}}/api/projekt/bulk
 Content-Type: application/json
 
 {{NewProjekty}}
 ###
 
 # @name NewOddeleniaRCBulk
-POST https://localhost:7031/api/oddelenia/bulk
+POST {{ApiBaseUrl}}/api/oddelenia/bulk
 Content-Type: application/json
 
 {{NewoddeleniaRC}}
