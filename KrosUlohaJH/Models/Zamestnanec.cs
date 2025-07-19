@@ -29,5 +29,9 @@ namespace KrosUlohaJH.Models
         public int? OddelenieId { get; set; }
         public Oddelenie? Oddelenie { get; set; } //? znamená, že môže byť null
         public ICollection<Divizia>? VedeneDivizie { get; set; }
+        public ICollection<Projekt>? Projekty { get; set; }
+        public ICollection<Oddelenie>? Oddelenia { get; set; }
+
+        
     }
 }

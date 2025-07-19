@@ -1,0 +1,15 @@
+
+
+# @name createDivizia
+POST https://localhost:7031/api/divizia
+Content-Type: application/json
+
+{{deleteDivizia}}
+
+###
+
+# @name deleteDivizia
+Delete https://localhost:7031/api/divizia/{{GetKod}}
+
+
+

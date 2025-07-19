@@ -1,33 +1,37 @@
-# @name updateFirma
+# @name updateDivizia
 POST https://localhost:7031/api/divizia
 Content-Type: application/json
 
-{ 
-    "Nazov": "SkuskaFirmy",
-    "Kod": "SF",
-    "VeduciRC": "970215/4567"
+{  
+    "Nazov": "Csob Banka", 
+    "Kod": "CSOB",
+    "VeduciRC": "890315/5678",
+    "FirmaId": "2"
 }
 
 
 ###
 
-# @name updateFirmaBulk
+# @name updateDiviziaBulk
 POST https://localhost:7031/api/divizia/bulk
 Content-Type: application/json
 
 [
-     { 
-        "Nazov": "SkuskaFirmy",
-        "Kod": "KR",
-        "RiaditelRc": "970215/4567"
+    {  
+        "Nazov": "Csob Banka", 
+        "Kod": "CSOB",
+        "VeduciRC": "890315/5678",
+        "FirmaId": "2"
     },
-    {
-        "Nazov": "SkuskaFirmy",
-        "Kod": "TS",
-        "VeduciRC": "970215/457"
+    {  
+        "Nazov": "Skuska Banka", 
+        "Kod": "Tatra",
+        "VeduciRC": "890315/578",
+        "FirmaId": "1"
     }
 ]
 
 ###
+
 
 

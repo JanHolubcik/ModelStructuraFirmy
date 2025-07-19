@@ -15,7 +15,7 @@ await tp.Test($"Novy zamestnanec by mal mat toto rodne cislo '{rc}' .", async ()
 {
     dynamic responseJson = await tp.Responses["getZamestnanec"].GetBodyAsExpandoAsync();
 
-    // Access JSON properties case-insensitively.
+// Access JSON properties case-insensitively.
 
-    Equal("990401/9999", responseJson.chyby[0].rodneCislo);
+    Equal(rc, responseJson.rodneCislo);
 });

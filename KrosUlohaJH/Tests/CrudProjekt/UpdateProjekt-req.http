@@ -1,0 +1,35 @@
+# @name updateProjekt
+POST https://localhost:7031/api/projekt
+Content-Type: application/json
+
+{ 
+    "Nazov" : "Skusobny projekt",
+    "Kod" : "SP",
+    "DiviziaId":"1",
+    "VeduciProjektuRC" :"920402/0001"
+}
+
+###
+
+# @name updateProjektBulk
+POST https://localhost:7031/api/projekt/bulk
+Content-Type: application/json
+
+[
+     { 
+        "Nazov" : "Skusobny projekt",
+        "Kod" : "SP",
+        "DiviziaId":"1",
+        "VeduciProjektuRC" :"920402/0001"
+    },
+    {
+        "Nazov": "Skusobny projekt2",
+        "Kod": "SP2",
+        "DiviziaId":"1",
+        "VeduciProjektuRC": "970215/457"
+    }
+]
+
+###
+
+

@@ -1,0 +1,13 @@
+# @name createProjekt
+POST https://localhost:7031/api/projekt
+Content-Type: application/json
+
+{{newProjekt}}
+
+###
+
+# @name getProjekt
+GET https://localhost:7031/api/projekt/xd
+
+
+

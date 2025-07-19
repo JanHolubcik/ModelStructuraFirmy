@@ -133,7 +133,7 @@ namespace KrosUlohaJH.Controllers
             _context.Projekty.Add(Projekt);
             await _context.SaveChangesAsync();
 
-            return (true, new CreatedAtActionResult(nameof(GetProjekt), "Projekt", new { rc = Projekt.Kod }, Projekt));
+            return (true, new CreatedAtActionResult(nameof(GetProjekt), "Projekt", new { kod = Projekt.Kod }, Projekt));
         }
 
         [HttpGet("{kod}")]

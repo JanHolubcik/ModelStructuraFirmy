@@ -25,12 +25,12 @@ namespace KrosUlohaJH.Models
                .WithMany(f => f.Divizie)
                .HasForeignKey(d => d.FirmaId);
 
-            //môže byť len jeden vedúci divízie, môže mať nastarosti viacero divízii
+            //môže byť len jeden vedúci divízie, jeden vedúci môže mať nastarosti viacero divízii
             modelBuilder.Entity<Divizia>()
-         .HasOne(d => d.Veduci)
-         .WithMany(z => z.VedeneDivizie) 
-         .HasForeignKey(d => d.VeduciRC)
-         .HasPrincipalKey(z => z.RodneCislo);
+                 .HasOne(d => d.Veduci)
+                 .WithMany(z => z.VedeneDivizie) 
+                 .HasForeignKey(d => d.VeduciRC)
+                 .HasPrincipalKey(z => z.RodneCislo);
 
             //projekt môže mať len jednu divíziu, jedna divízia môže mať viacero projektov 
             modelBuilder.Entity<Projekt>()
@@ -38,25 +38,27 @@ namespace KrosUlohaJH.Models
                .WithMany(f => f.Projekty)
                .HasForeignKey(d => d.DiviziaId);
 
-            //môže byť len jeden vedúci projektu
+            //môže byť len jeden vedúci projektu, jeden vedúci môže mať viacero projektov
             modelBuilder.Entity<Projekt>()
                 .HasOne(d => d.VeduciProjektu)
-                .WithOne()
-                .HasForeignKey<Projekt>(d => d.VeduciProjektuRC)
-                .HasPrincipalKey<Zamestnanec>(z => z.RodneCislo);
+                .WithMany(z => z.Projekty)
+                .HasForeignKey(d => d.VeduciProjektuRC)
+                .HasPrincipalKey(z => z.RodneCislo);
 
-            //projekt môže mať len jednu divíziu, jedna divízia môže mať viacero projektov 
+
+            //oddelenie môže mať len jedno oddelenia, jedno oddelenie môže mať viacero projektov 
             modelBuilder.Entity<Oddelenie>()
                .HasOne(d => d.Projekt)
                .WithMany(f => f.Oddelenia)
                .HasForeignKey(d => d.ProjektId);
 
-            //môže byť len jeden vedúci projektu
+            //môže byť len jeden vedúci oddelenia, jeden zamestnanec môže mať na starosti viacero oddelení
             modelBuilder.Entity<Oddelenie>()
                 .HasOne(d => d.VeduciOddelenia)
-                .WithOne()
-                .HasForeignKey<Oddelenie>(d => d.VeduciOddeleniaRc)
-                .HasPrincipalKey<Zamestnanec>(z => z.RodneCislo);
+                .WithMany(z => z.Oddelenia)
+                .HasForeignKey(d => d.VeduciOddeleniaRc)
+                .HasPrincipalKey(z => z.RodneCislo);
+
 
             //oddelenie môže mať viacero zamestnancov
             modelBuilder.Entity<Zamestnanec>()
