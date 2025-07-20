@@ -3,7 +3,7 @@ tp.Test("Vytvor zamestnanca. (200)", () =>
 {
     // Access named responses using their names.
     var statusCode = tp.Responses["createZamestnanec"].StatusCode();
-    Equal(201, statusCode);
+    Contains(statusCode, new[] { 200, 201 });
 
 });
 

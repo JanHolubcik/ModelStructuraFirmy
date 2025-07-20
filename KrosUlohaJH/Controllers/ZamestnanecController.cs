@@ -1,10 +1,7 @@
 ﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace KrosUlohaJH.Controllers
@@ -35,7 +32,7 @@ namespace KrosUlohaJH.Controllers
                  TelefonneCislo = zamestnanecDTO.TelefonneCislo,
 
     };
-            var (success, result) = await CreateOrUpdate(zamestnanec);
+             var (success, result) = await CreateOrUpdate(zamestnanec);
             return result;
         }
 
@@ -55,6 +52,7 @@ namespace KrosUlohaJH.Controllers
                     Email = zamestnanecDTO.Email,
                     Meno = zamestnanecDTO.Meno,
                     Priezvisko = zamestnanecDTO.Priezvisko,
+                    TelefonneCislo = zamestnanecDTO.TelefonneCislo,
 
                 };
                 var (ok, result) = await CreateOrUpdate(zamestnanec);
@@ -122,7 +120,7 @@ namespace KrosUlohaJH.Controllers
                         }
                     
                     var existujeTelefon = await _context.Zamestnanci
-                         .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
+                         .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
                     if (existujeTelefon)
                     {
                         return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));

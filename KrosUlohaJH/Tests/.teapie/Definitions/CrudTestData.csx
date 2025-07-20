@@ -29,5 +29,7 @@ ZamestnanecTest ZamestnanecCrud = new ZamestnanecTest
     Meno = "Skusony",
     Priezvisko = "Priezvisko",
     Email = "SK.PR@examsple.com",
-    Titul = "MGLR."
+    Titul = "MGLR.",
+    TelefonneCislo = "+421940123456",
+    OddelenieId = 1,
 };

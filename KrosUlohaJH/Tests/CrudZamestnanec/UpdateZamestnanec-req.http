@@ -18,7 +18,8 @@ Content-Type: application/json
         "Titul": "Mgr.",
         "Priezvisko": "IDK",
         "OddelenieId": 2,
-        "Email" : "SXK.PR@examsple.com"
+        "Email" : "SXK.PR@examsple.com",
+        "TelefonneCislo" : "+421940123458"
     },
     {
         "RodneCislo": "990401/483",
@@ -33,7 +34,8 @@ Content-Type: application/json
 GET {{ApiBaseUrl}}{{Zamestnanec}}?rc={{GetKod}}
 
 
-
+    TelefonneCislo = "421940123456",
+    OddelenieId = 1,
 
 
 
