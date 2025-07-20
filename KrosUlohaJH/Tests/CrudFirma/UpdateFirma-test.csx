@@ -22,7 +22,7 @@ await tp.Test("Update by mal obsahovat pocet uspesnich 1 a neuspesnych 1, kvoli 
     var uspesne = responseJsonBulk.uspesne;
     var neuspesne = responseJsonBulk.neuspesne;
 
-    NotEqual(kod, responseJsonNew.Kod);
+    Equal(kod, responseJsonNew.Kod);
     NotEqual(Nazov, responseJsonNew.Nazov);
 
     NotEqual(RiaditelRc, responseJsonNew.RiaditelRc);
