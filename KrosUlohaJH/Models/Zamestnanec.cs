@@ -13,7 +13,7 @@ namespace KrosUlohaJH.Models
 
         [Required(ErrorMessage = "Meno je povinné.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Meno musí mať aspoň 2 znaky.")]
-        public required string  Meno { get; set; }
+        public required string Meno { get; set; }
 
         [Required(ErrorMessage = "Priezvisko je povinné")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Priezvisko musí mať aspoň 2 znaky.")]
@@ -35,6 +35,6 @@ namespace KrosUlohaJH.Models
         public ICollection<Projekt>? Projekty { get; set; }
         public ICollection<Oddelenie>? Oddelenia { get; set; }
 
-        
+
     }
 }

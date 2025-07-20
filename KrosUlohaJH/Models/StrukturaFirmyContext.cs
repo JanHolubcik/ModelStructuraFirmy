@@ -15,9 +15,9 @@ namespace KrosUlohaJH.Models
             //môže byť len jeden unikátny majiteľ firmy
             modelBuilder.Entity<Firma>()
                 .HasOne(f => f.Riaditel)
-                .WithOne() 
+                .WithOne()
                 .HasForeignKey<Firma>(f => f.RiaditelRc)
-                .HasPrincipalKey<Zamestnanec>(z => z.RodneCislo); 
+                .HasPrincipalKey<Zamestnanec>(z => z.RodneCislo);
 
             //divízia môže mať len jednu firmu, jedna firma môže mať viacero divízii
             modelBuilder.Entity<Divizia>()
@@ -28,7 +28,7 @@ namespace KrosUlohaJH.Models
             //môže byť len jeden vedúci divízie, jeden vedúci môže mať nastarosti viacero divízii
             modelBuilder.Entity<Divizia>()
                  .HasOne(d => d.Veduci)
-                 .WithMany(z => z.VedeneDivizie) 
+                 .WithMany(z => z.VedeneDivizie)
                  .HasForeignKey(d => d.VeduciRC)
                  .HasPrincipalKey(z => z.RodneCislo);
 

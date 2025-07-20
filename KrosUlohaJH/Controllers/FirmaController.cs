@@ -1,4 +1,4 @@
-﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
+﻿using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +25,7 @@ namespace KrosUlohaJH.Controllers
             {
                 Kod = FirmaDTO.Kod,
                 Nazov = FirmaDTO.Nazov,
-                RiaditelRc = FirmaDTO.RiaditelRc,              
+                RiaditelRc = FirmaDTO.RiaditelRc,
 
             };
             var (success, result) = await CreateOrUpdate(Firma);
@@ -72,7 +72,7 @@ namespace KrosUlohaJH.Controllers
 
             if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
             {
-                // If provided, check if it exists in Zamestnanci
+
                 var exists = await _context.Zamestnanci
                     .AnyAsync(z => z.RodneCislo == Firma.RiaditelRc);
 
@@ -94,8 +94,8 @@ namespace KrosUlohaJH.Controllers
                 if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
                     existujuci.RiaditelRc = Firma.RiaditelRc;
 
-                 var priradenyRiaditel = await _context.Firmy
-                .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
+                var priradenyRiaditel = await _context.Firmy
+               .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
 
                 if (priradenyRiaditel)
                 {
@@ -138,7 +138,7 @@ namespace KrosUlohaJH.Controllers
             var veduciExistuje = await _context.Firmy
     .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
 
-            if(veduciExistuje)
+            if (veduciExistuje)
             {
                 return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
             }

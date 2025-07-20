@@ -1,4 +1,4 @@
-﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
+﻿using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -29,10 +29,10 @@ namespace KrosUlohaJH.Controllers
                 Email = zamestnanecDTO.Email,
                 Meno = zamestnanecDTO.Meno,
                 Priezvisko = zamestnanecDTO.Priezvisko,
-                 TelefonneCislo = zamestnanecDTO.TelefonneCislo,
+                TelefonneCislo = zamestnanecDTO.TelefonneCislo,
 
-    };
-             var (success, result) = await CreateOrUpdate(zamestnanec);
+            };
+            var (success, result) = await CreateOrUpdate(zamestnanec);
             return result;
         }
 
@@ -112,13 +112,14 @@ namespace KrosUlohaJH.Controllers
                 if (zamestnanec.OddelenieId.HasValue)
                     existujuci.OddelenieId = zamestnanec.OddelenieId;
 
-                if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo)) {
-               
-                        if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
-                        {
-                            return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
-                        }
-                    
+                if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
+                {
+
+                    if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
+                    {
+                        return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
+                    }
+
                     var existujeTelefon = await _context.Zamestnanci
                          .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
                     if (existujeTelefon)
@@ -127,7 +128,7 @@ namespace KrosUlohaJH.Controllers
                     }
                     existujuci.TelefonneCislo = zamestnanec.TelefonneCislo;
                 }
-                    
+
 
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci));
@@ -147,8 +148,8 @@ namespace KrosUlohaJH.Controllers
                 {
                     return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
                 }
-            var existuje = await _context.Zamestnanci
-                 .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
+                var existuje = await _context.Zamestnanci
+                     .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
                 if (existuje)
                 {
                     return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
@@ -219,11 +220,11 @@ namespace KrosUlohaJH.Controllers
 public class ZamestnanecDto
 {
 
-    public  string? RodneCislo { get; set; }
+    public string? RodneCislo { get; set; }
 
-    public  string? Meno { get; set; }
+    public string? Meno { get; set; }
 
-    public  string? Priezvisko { get; set; }
+    public string? Priezvisko { get; set; }
 
     public string? Email { get; set; }
     public string? Titul { get; set; }

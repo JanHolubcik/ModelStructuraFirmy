@@ -17,7 +17,7 @@ namespace KrosUlohaJH.Models
 
 
         [ForeignKey(nameof(VeduciOddelenia))]
-        public  string? VeduciOddeleniaRc { get; set; }
+        public string? VeduciOddeleniaRc { get; set; }
         public Zamestnanec? VeduciOddelenia { get; set; }
 
         public ICollection<Zamestnanec>? Zamestnanci { get; set; }

@@ -1,4 +1,4 @@
-﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
+﻿using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -161,7 +161,7 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpDelete("{kod}")]
-        public async Task<ActionResult< Projekt>> DeleteProjekt(string Kod)
+        public async Task<ActionResult<Projekt>> DeleteProjekt(string Kod)
         {
             var projekt = await _context.Projekty
                 .FirstOrDefaultAsync(z => z.Kod == Kod);

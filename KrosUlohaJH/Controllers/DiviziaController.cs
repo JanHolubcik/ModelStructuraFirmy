@@ -1,4 +1,4 @@
-﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
+﻿using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -19,17 +19,17 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Divizia>> PostOrUpdateDivizia(DiviziaDto DiviziaDto)
         {
-   
 
-                        var Divizia = new Divizia
-                        {
-                           Kod= DiviziaDto.Kod,
-                           FirmaId = DiviziaDto.FirmaId,
-                           Nazov = DiviziaDto.Nazov,
-                           VeduciRC = DiviziaDto.VeduciRC,
-                           
 
-                        };
+            var Divizia = new Divizia
+            {
+                Kod = DiviziaDto.Kod,
+                FirmaId = DiviziaDto.FirmaId,
+                Nazov = DiviziaDto.Nazov,
+                VeduciRC = DiviziaDto.VeduciRC,
+
+
+            };
             var (success, result) = await CreateOrUpdate(Divizia);
             return result;
         }
@@ -74,7 +74,7 @@ namespace KrosUlohaJH.Controllers
 
             if (!string.IsNullOrWhiteSpace(Divizia.VeduciRC))
             {
-                // If provided, check if it exists in Zamestnanci
+ 
                 var exists = await _context.Zamestnanci
                     .AnyAsync(z => z.RodneCislo == Divizia.VeduciRC);
 
@@ -93,7 +93,6 @@ namespace KrosUlohaJH.Controllers
 
 
 
-                //aktualizuj hodnoty
                 if (!string.IsNullOrWhiteSpace(Divizia.Nazov))
                     existujuci.Nazov = Divizia.Nazov;
 

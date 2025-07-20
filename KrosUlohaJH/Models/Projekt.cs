@@ -14,14 +14,14 @@ namespace KrosUlohaJH.Models
         public required string Kod { get; set; }
 
         public int? DiviziaId { get; set; }
-     
-        public  Divizia? Divizia { get; set; }
+
+        public Divizia? Divizia { get; set; }
 
         [ForeignKey(nameof(VeduciProjektu))]
         public string? VeduciProjektuRC { get; set; }
         public Zamestnanec? VeduciProjektu { get; set; }
 
         public ICollection<Oddelenie>? Oddelenia { get; set; }
-      
+
     }
 }

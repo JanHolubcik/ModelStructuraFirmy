@@ -17,7 +17,7 @@ namespace KrosUlohaJH.Models
         [ForeignKey(nameof(Riaditel))]
         public string? RiaditelRc { get; set; }  // FK na Zamestnanec.RodneCislo
 
-        public Zamestnanec? Riaditel { get; set; } 
+        public Zamestnanec? Riaditel { get; set; }
 
         public ICollection<Divizia>? Divizie { get; set; }
     }

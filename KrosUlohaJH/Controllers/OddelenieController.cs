@@ -1,4 +1,4 @@
-﻿using KrosUlohaJH.Models; // namespace pre tvoje modely
+﻿using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -31,7 +31,7 @@ namespace KrosUlohaJH.Controllers
             };
 
             var (success, result) = await CreateOrUpdate(Oddelenie);
-                return result;
+            return result;
         }
 
         [HttpPost("bulk")]
@@ -74,7 +74,7 @@ namespace KrosUlohaJH.Controllers
 
             if (!string.IsNullOrWhiteSpace(Oddelenie.VeduciOddeleniaRc))
             {
-                // If provided, check if it exists in Zamestnanci
+    
                 var exists = await _context.Zamestnanci
                     .AnyAsync(z => z.RodneCislo == Oddelenie.VeduciOddeleniaRc);
 
@@ -89,8 +89,6 @@ namespace KrosUlohaJH.Controllers
             {
 
 
-
-                //aktualizuj hodnoty
                 if (!string.IsNullOrWhiteSpace(Oddelenie.Nazov))
                     existujuci.Nazov = Oddelenie.Nazov;
 
@@ -103,7 +101,7 @@ namespace KrosUlohaJH.Controllers
                     existujuci.ProjektId = Oddelenie.ProjektId;
 
                 await _context.SaveChangesAsync();
-                return  (true, new OkObjectResult(existujuci)); ;
+                return (true, new OkObjectResult(existujuci)); ;
             }
 
 
@@ -159,7 +157,7 @@ namespace KrosUlohaJH.Controllers
                         Priezvisko = p.Priezvisko,
                         RodneCislo = p.RodneCislo,
                         Titul = p.Titul,
-                    
+
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
