@@ -1,1 +1,1 @@
-<pre> ## Run in PowerShell ```teapie test KrosUlohaJH\Tests\InitTestBulk\CreateZamestnanec-req.http``` </pre>
+<pre> teapie test KrosUlohaJH\Tests\InitTestBulk\CreateZamestnanec-req.http </pre>
