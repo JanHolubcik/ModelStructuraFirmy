@@ -1,5 +1,8 @@
 # Zadanie kros
 
+## Prerequisites
+.Net 9.0
+
 Použité technológie: **C# (ASP.NET)**,  **Microsoft SQL Server** a **TeaPie** (testovanie).
 
 Predtým ako sa spustí inicializácia, by sa mala vytvoriť databáza cez:
