@@ -2,7 +2,7 @@
 
 Použité technológie: **C# (ASP.NET)**,  **Microsoft SQL Server** a **TeaPie** (testovanie).
 
-Predtým ako sa spustí inicializácia, by sa mala vytvoriť databáza cez?
+Predtým ako sa spustí inicializácia, by sa mala vytvoriť databáza cez:
 
 ```sh
 update-database
