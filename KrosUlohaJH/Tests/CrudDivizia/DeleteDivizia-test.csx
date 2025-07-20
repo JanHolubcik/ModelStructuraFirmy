@@ -1,5 +1,5 @@
 
-tp.Test("Vytvor firmu. (200)", () =>
+tp.Test("Vytvor diviziu. (200,201)", () =>
 {
     // Access named responses using their names.
     var statusCode = tp.Responses["createDivizia"].StatusCode();
@@ -7,7 +7,7 @@ tp.Test("Vytvor firmu. (200)", () =>
 
 });
 
-await tp.Test("Vymaz firmu  (200)", async () =>
+await tp.Test("Vymaz diviziu  (200)", async () =>
 {
     var statusCode = tp.Responses["deleteDivizia"].StatusCode();
     var statusCodeGet = tp.Responses["getDivizia"].StatusCode();

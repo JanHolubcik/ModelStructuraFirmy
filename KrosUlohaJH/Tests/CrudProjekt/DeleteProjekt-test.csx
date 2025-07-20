@@ -1,5 +1,5 @@
 
-tp.Test("Vytvor firmu. (200)", () =>
+tp.Test("Vytvor projekt. (200)", () =>
 {
     // Access named responses using their names.
     var statusCode = tp.Responses["deleteProjekt"].StatusCode();
@@ -7,7 +7,7 @@ tp.Test("Vytvor firmu. (200)", () =>
 
 });
 
-await tp.Test("Vymaz firmu  (200)", async () =>
+await tp.Test("Vymaz projekt  (200)", async () =>
 {
     var statusCode = tp.Responses["deleteProjekt"].StatusCode();
     var statusCodeGet = tp.Responses["getProjekt"].StatusCode();
