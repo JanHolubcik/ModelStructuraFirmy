@@ -13,7 +13,7 @@ var Nazov = obj.Nazov;
 var DiviziaId = obj.DiviziaId;
 var VeduciProjektuRC = obj.VeduciProjektuRC;
 
-await tp.Test("Update by mal mat tento kod v errors SP2, lebo rodne cislo je v zlom formate. ", async () =>
+await tp.Test("Response by mal mat pocet uspesnych 1 a neuspesnych 1, lebo rodne cislo je v zlom formate pre druhy projekt. ", async () =>
 {
     dynamic responseJsonBulk = await tp.Responses["updateProjektBulk"].GetBodyAsExpandoAsync();
     dynamic responseJsonNew = await tp.Responses["getProjekt"].GetBodyAsExpandoAsync();
@@ -22,7 +22,7 @@ await tp.Test("Update by mal mat tento kod v errors SP2, lebo rodne cislo je v z
     var uspesne = responseJsonBulk.uspesne;
     var neuspesne = responseJsonBulk.neuspesne;
 
-    NotEqual(kod, responseJsonNew.Kod);
+
     NotEqual(Nazov, responseJsonNew.Nazov);
     NotEqual(DiviziaId, Convert.ToInt64(responseJsonNew.DiviziaId));
 

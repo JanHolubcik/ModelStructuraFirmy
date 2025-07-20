@@ -3,7 +3,7 @@ tp.Test("Vytvor diviziu. (201)", () =>
 {
     // Access named responses using their names.
     var statusCode = tp.Responses["createDivizia"].StatusCode();
-    Equal(200, statusCode);
+    Equal(201, statusCode);
 
 });
 

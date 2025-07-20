@@ -14,7 +14,7 @@ Content-Type: application/json
 [
      { 
         "Nazov": "SkuskaFirmy",
-        "Kod": "SO",
+        "Kod": "SY",
         "RiaditelRc": "970215/4567"
     },
     {

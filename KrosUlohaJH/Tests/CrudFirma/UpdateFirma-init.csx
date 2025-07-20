@@ -6,4 +6,4 @@ string kodGet = FirmaCrud.Kod;
 
 
 tp.SetVariable("newFirma", FirmaCrud.ToJsonString());
-tp.SetVariable("GetFirma", kodGet);
+tp.SetVariable("GetKod", kodGet);
