@@ -1,3 +1,12 @@
+# Zadanie kros
+
+Použité technológie: **C# (ASP.NET)**,  **Microsoft SQL Server** a **TeaPie** (testovanie).
+
+Predtým ako sa spustí inicializácia, by sa mala vytvoriť databáza cez?
+
+```sh
+update-database
+```
 
 Inicializácia databázy
 
