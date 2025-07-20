@@ -1,5 +1,5 @@
 # @name createProjekt
-POST {{ApiBaseUrl}}/api/projekt
+POST {{ApiBaseUrl}}{{Projekt}}
 Content-Type: application/json
 
 {{newProjekt}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name getProjekt
-GET {{ApiBaseUrl}}/api/projekt/xd
+GET {{ApiBaseUrl}}{{Projekt}}{{GetKod}}
 
 
 

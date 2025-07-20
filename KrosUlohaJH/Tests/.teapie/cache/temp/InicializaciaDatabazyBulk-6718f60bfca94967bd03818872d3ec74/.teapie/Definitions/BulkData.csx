@@ -79,7 +79,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Nováková",
         Email = "jana.novakova@example.com",
         Titul = "Mgr.",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421901234567"
     },
     new ZamestnanecTest
     {
@@ -88,7 +89,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Horváth",
         Email = "peter.horvath@example.com",
         Titul = "",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421902345678"
     },
     new ZamestnanecTest
     {
@@ -97,7 +99,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Bieliková",
         Email = "lucia.bielikova@example.com",
         Titul = "Ing.",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421903456789"
     },
     new ZamestnanecTest
     {
@@ -106,7 +109,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Kováč",
         Email = "marek.kovac@example.com",
         Titul = "",
-        OddelenieId = null
+        OddelenieId = null,
+        TelefonneCislo = "+421904567890"
     },
     new ZamestnanecTest
     {
@@ -115,7 +119,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Tóthová",
         Email = "anna.tothova@example.com",
         Titul = "Bc.",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421905678901"
     },
     new ZamestnanecTest
     {
@@ -124,7 +129,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Szabó",
         Email = "juraj.szabo@example.com",
         Titul = "",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421906789012"
     },
     new ZamestnanecTest
     {
@@ -133,7 +139,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Králová",
         Email = "zuzana.kralova@example.com",
         Titul = "",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421907890123"
     },
     new ZamestnanecTest
     {
@@ -142,7 +149,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Farkaš",
         Email = "tomas.farkas@example.com",
         Titul = "",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421908901234"
     },
     new ZamestnanecTest
     {
@@ -151,7 +159,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Urbanová",
         Email = "monika.urbanova@example.com",
         Titul = "",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421909012345"
     },
     new ZamestnanecTest
     {
@@ -160,7 +169,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Baláž",
         Email = "martin.balaz@example.com",
         Titul = "Mgr.",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421910123456"
     },
     new ZamestnanecTest
     {
@@ -169,7 +179,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Rybárová",
         Email = "simona.rybarova@example.com",
         Titul = "",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421911234567"
     },
     new ZamestnanecTest
     {
@@ -178,7 +189,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Pavlík",
         Email = "dominik.pavlik@example.com",
         Titul = "",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421912345678"
     },
     new ZamestnanecTest
     {
@@ -187,7 +199,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Michalová",
         Email = "veronika.michalova@example.com",
         Titul = "",
-        OddelenieId = null
+        OddelenieId = null,
+        TelefonneCislo = "+421913456789"
     },
     new ZamestnanecTest
     {
@@ -196,7 +209,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Blažek",
         Email = "andrej.blazek@example.com",
         Titul = "PhDr.",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421914567890"
     },
     new ZamestnanecTest
     {
@@ -205,7 +219,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Holá",
         Email = "barbora.hola@example.com",
         Titul = "",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421915678901"
     },
     new ZamestnanecTest
     {
@@ -214,7 +229,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Gregor",
         Email = "filip.gregor@example.com",
         Titul = "Bc.",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421916789012"
     },
     new ZamestnanecTest
     {
@@ -223,7 +239,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Janíková",
         Email = "lenka.janikova@example.com",
         Titul = "",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421917890123"
     },
     new ZamestnanecTest
     {
@@ -232,7 +249,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Hudec",
         Email = "matej.hudec@example.com",
         Titul = "Ing.",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421918901234"
     },
     new ZamestnanecTest
     {
@@ -241,7 +259,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Poláková",
         Email = "kristina.polakova@example.com",
         Titul = "",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421919012345"
     },
     new ZamestnanecTest
     {
@@ -250,7 +269,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Medveď",
         Email = "robert.medved@example.com",
         Titul = "",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421920123456"
     },
     new ZamestnanecTest
     {
@@ -259,7 +279,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Lacková",
         Email = "ivana.lackova@example.com",
         Titul = "",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421921234567"
     },
     new ZamestnanecTest
     {
@@ -268,7 +289,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Jankovič",
         Email = "michal.jankovic@example.com",
         Titul = "",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421922345678"
     },
     new ZamestnanecTest
     {
@@ -277,7 +299,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Švecová",
         Email = "dana.svecova@example.com",
         Titul = "Mgr.",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421923456789"
     },
     new ZamestnanecTest
     {
@@ -286,7 +309,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Mlynár",
         Email = "emil.mlynar@example.com",
         Titul = "",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421924567890"
     },
     new ZamestnanecTest
     {
@@ -295,7 +319,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Kubišová",
         Email = "sona.kubisova@example.com",
         Titul = "",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421925678901"
     },
     new ZamestnanecTest
     {
@@ -304,7 +329,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Novotný",
         Email = "jan.novotny@example.com",
         Titul = "Ing.",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421926789012"
     },
     new ZamestnanecTest
     {
@@ -313,7 +339,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Kováčová",
         Email = "lucia.kovacova@example.com",
         Titul = "",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421927890123"
     },
     new ZamestnanecTest
     {
@@ -322,7 +349,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Baláž",
         Email = "peter.balaz@example.com",
         Titul = "Mgr.",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421928901234"
     },
     new ZamestnanecTest
     {
@@ -331,7 +359,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Zelená",
         Email = "maria.zelena@example.com",
         Titul = "",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421929012345"
     },
     new ZamestnanecTest
     {
@@ -340,7 +369,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Horváth",
         Email = "robert.horvath@example.com",
         Titul = "Bc.",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421930123456"
     },
     new ZamestnanecTest
     {
@@ -349,7 +379,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Tóthová",
         Email = "eva.tothova@example.com",
         Titul = "",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421931234567"
     },
     new ZamestnanecTest
     {
@@ -358,7 +389,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Urban",
         Email = "tomas.urban@example.com",
         Titul = "Ing.",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421932345678"
     },
     new ZamestnanecTest
     {
@@ -367,7 +399,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Farkašová",
         Email = "zuzana.farkasova@example.com",
         Titul = "",
-        OddelenieId = 3
+        OddelenieId = 3,
+        TelefonneCislo = "+421933456789"
     },
     new ZamestnanecTest
     {
@@ -376,7 +409,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Kollár",
         Email = "michal.kollar@example.com",
         Titul = "Mgr.",
-        OddelenieId = 4
+        OddelenieId = 4,
+        TelefonneCislo = "+421934567890"
     },
     new ZamestnanecTest
     {
@@ -385,7 +419,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Vargová",
         Email = "andrea.vargova@example.com",
         Titul = "",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421935678901"
     },
     new ZamestnanecTest
     {
@@ -394,7 +429,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Biely",
         Email = "martin.biely@example.com",
         Titul = "Bc.",
-        OddelenieId = null
+        OddelenieId = null,
+        TelefonneCislo = "+421936789012"
     },
     new ZamestnanecTest
     {
@@ -403,7 +439,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Čierna",
         Email = "kristina.cierna@example.com",
         Titul = "",
-        OddelenieId = 1
+        OddelenieId = 1,
+        TelefonneCislo = "+421937890123"
     },
     new ZamestnanecTest
     {
@@ -412,7 +449,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Majer",
         Email = "samuel.majer@example.com",
         Titul = "Ing.",
-        OddelenieId = 2
+        OddelenieId = 2,
+        TelefonneCislo = "+421938901234"
     },
     new ZamestnanecTest
     {
@@ -421,7 +459,8 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Mikušová",
         Email = "tatiana.mikusova@example.com",
         Titul = "",
-        OddelenieId = null
+        OddelenieId = null,
+        TelefonneCislo = "+421939012345"
     },
     new ZamestnanecTest
     {
@@ -430,6 +469,7 @@ var zamestnanci = new List<ZamestnanecTest>
         Priezvisko = "Šimek",
         Email = "igor.simek@example.com",
         Titul = "Mgr.",
-        OddelenieId = 5
+        OddelenieId = 5,
+        TelefonneCislo = "+421940123456"
     }
 };

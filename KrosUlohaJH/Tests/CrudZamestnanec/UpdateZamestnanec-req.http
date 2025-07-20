@@ -1,34 +1,37 @@
-# @name updateZamestnanec
-POST {{ApiBaseUrl}}/api/zamestnanec
+# @name newZamestnanec
+POST {{ApiBaseUrl}}{{Zamestnanec}}
 Content-Type: application/json
 
-{
-    "RodneCislo": "990401/9999",
-    "Titul": "Mgr.",
-    "OddelenieId": 1
-}
+{{NewZamestnanec}}
 
 
 ###
 
 # @name updateZamestnanecBulk
-POST {{ApiBaseUrl}}/api/zamestnanec/bulk
+POST {{ApiBaseUrl}}{{Zamestnanec}}bulk/
 Content-Type: application/json
 
 [
     {
-        "RodneCislo": "990401/9999",
+        "RodneCislo": "990401/4834",
+        "Meno" : "Skusony",
         "Titul": "Mgr.",
-        "OddelenieId": 1
+        "Priezvisko": "IDK",
+        "OddelenieId": 2,
+        "Email" : "SXK.PR@examsple.com"
     },
     {
-        "RodneCislo": "990401/4834",
+        "RodneCislo": "990401/483",
         "Titul": "Mgr.",
         "OddelenieId": 1
     }
 ]
 
 ###
+
+# @name getUser
+GET {{ApiBaseUrl}}{{Zamestnanec}}?rc={{GetKod}}
+
 
 
 

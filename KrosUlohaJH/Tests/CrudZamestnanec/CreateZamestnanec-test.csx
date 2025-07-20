@@ -15,7 +15,7 @@ await tp.Test($"Novy zamestnanec by mal mat toto rodne cislo '{rc}' .", async ()
 {
     dynamic responseJson = await tp.Responses["getZamestnanec"].GetBodyAsExpandoAsync();
 
-// Access JSON properties case-insensitively.
+
 
     Equal(rc, responseJson.rodneCislo);
 });

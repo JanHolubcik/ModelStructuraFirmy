@@ -13,7 +13,7 @@ var Nazov = obj.Nazov;
 var ProjektId = obj.ProjektId;
 var VeduciOddeleniaRc = obj.VeduciOddeleniaRc;
 
-await tp.Test("Update by mal mat tento kod v errors SO2, lebo rodne cislo je v zlom formate. ", async () =>
+await tp.Test("Update by mal obsahovat pocet uspesnich 1 a neuspesnych 1, kvoli zle zadanemu rodnemu cislu.  ", async () =>
 {
     dynamic responseJsonBulk = await tp.Responses["updateOddelenieBulk"].GetBodyAsExpandoAsync();
     dynamic responseJsonNew = await tp.Responses["getOddelenie"].GetBodyAsExpandoAsync();

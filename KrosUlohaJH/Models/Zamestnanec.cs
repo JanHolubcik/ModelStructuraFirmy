@@ -19,6 +19,9 @@ namespace KrosUlohaJH.Models
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Priezvisko musí mať aspoň 2 znaky.")]
         public required string Priezvisko { get; set; }
 
+        [Phone]
+        [MaxLength(15)]
+        public string? TelefonneCislo { get; set; }
 
         [Required(ErrorMessage = "Email je povinný.")]
         [EmailAddress(ErrorMessage = "Neplatný formát emailovej adresy.")]

@@ -1,5 +1,5 @@
 # @name updateFirma
-POST {{ApiBaseUrl}}/api/firma
+POST {{ApiBaseUrl}}{{Firma}}
 Content-Type: application/json
 
 {{newFirma}}
@@ -8,7 +8,7 @@ Content-Type: application/json
 ###
 
 # @name updateFirmaBulk
-POST {{ApiBaseUrl}}/api/firma/bulk
+POST {{ApiBaseUrl}}{{Firma}}bulk
 Content-Type: application/json
 
 [
@@ -27,4 +27,4 @@ Content-Type: application/json
 ###
 
 # @name getFirma
-Get {{ApiBaseUrl}}/api/firma/{{GetKod}}
+Get {{ApiBaseUrl}}{{Firma}}{{GetKod}}

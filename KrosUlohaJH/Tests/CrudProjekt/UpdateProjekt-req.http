@@ -1,25 +1,20 @@
 # @name updateProjekt
-POST {{ApiBaseUrl}}/api/projekt
+POST {{ApiBaseUrl}}{{Projekt}}
 Content-Type: application/json
 
-{ 
-    "Nazov" : "Skusobny projekt",
-    "Kod" : "SP",
-    "DiviziaId":"1",
-    "VeduciProjektuRC" :"920402/0001"
-}
+{{newProjekt}}
 
 ###
 
 # @name updateProjektBulk
-POST {{ApiBaseUrl}}/api/projekt/bulk
+POST {{ApiBaseUrl}}{{Projekt}}bulk
 Content-Type: application/json
 
 [
      { 
         "Nazov" : "Skusobny projekt",
-        "Kod" : "SP",
-        "DiviziaId":"1",
+        "Kod" : "PRJ-Mars",
+        "DiviziaId":"2",
         "VeduciProjektuRC" :"920402/0001"
     },
     {
@@ -31,5 +26,9 @@ Content-Type: application/json
 ]
 
 ###
+
+# @name getProjekt
+GET {{ApiBaseUrl}}{{Projekt}}{{GetKod}}
+
 
 

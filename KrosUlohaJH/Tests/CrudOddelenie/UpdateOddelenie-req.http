@@ -1,5 +1,5 @@
 # @name updateOddelenie
-POST {{ApiBaseUrl}}/api/oddelenie
+POST {{ApiBaseUrl}}{{Oddelenie}}
 Content-Type: application/json
 
 {{newOddelenie}}
@@ -8,7 +8,7 @@ Content-Type: application/json
 ###
 
 # @name updateOddelenieBulk
-POST {{ApiBaseUrl}}/api/oddelenie/bulk
+POST {{ApiBaseUrl}}{{Oddelenie}}bulk
 Content-Type: application/json
 
 [
@@ -29,4 +29,4 @@ Content-Type: application/json
 ###
 
 # @name getOddelenie
-Get {{ApiBaseUrl}}/api/oddelenie/{{GetKod}}
+Get {{ApiBaseUrl}}{{Oddelenie}}{{GetKod}}

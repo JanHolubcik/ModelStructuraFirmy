@@ -14,3 +14,20 @@ OddelenieTest OddelenieCrud = new OddelenieTest
     VeduciOddeleniaRc = "920402/0001"
 };
 FirmaTest FirmaCrud = new FirmaTest { Nazov = "Skusobny", Kod = "SY", RiaditelRc = "920402/0001" };
+
+ProjektTest ProjektCrud = new ProjektTest
+{
+    Nazov = "Projekt Mars",
+    Kod = "PRJ-Mars",
+    DiviziaId = 1,
+    VeduciProjektuRC = "870927/4444"
+};
+
+ZamestnanecTest ZamestnanecCrud = new ZamestnanecTest
+{
+    RodneCislo = "990401/4834",
+    Meno = "Skusony",
+    Priezvisko = "Priezvisko",
+    Email = "SK.PR@examsple.com",
+    Titul = "MGLR."
+};

@@ -8,4 +8,5 @@ public class ZamestnanecTest
     public string Email { get; set; }
     public string Titul { get; set; }
     public int? OddelenieId { get; set; }
+    public string? TelefonneCislo { get; set; }
 }

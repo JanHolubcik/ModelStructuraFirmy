@@ -165,6 +165,10 @@ namespace KrosUlohaJH.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("TelefonneCislo")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
                     b.Property<string>("Titul")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

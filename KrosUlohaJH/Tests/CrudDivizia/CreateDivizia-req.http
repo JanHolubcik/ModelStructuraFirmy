@@ -1,5 +1,5 @@
 # @name createDivizia
-POST {{ApiBaseUrl}}/api/divizia
+POST {{ApiBaseUrl}}{{Divizia}}
 Content-Type: application/json
 
 {{newDivizia}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name getDivizia
-GET {{ApiBaseUrl}}/api/divizia/{{GetKod}}
+GET {{ApiBaseUrl}}{{Divizia}}{{GetKod}}
 
 
 

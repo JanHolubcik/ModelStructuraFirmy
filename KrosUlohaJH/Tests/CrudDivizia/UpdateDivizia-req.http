@@ -1,5 +1,5 @@
 # @name updateDivizia
-POST {{ApiBaseUrl}}/api/divizia
+POST {{ApiBaseUrl}}{{Divizia}}
 Content-Type: application/json
 
 {{newDivizia}}
@@ -7,7 +7,7 @@ Content-Type: application/json
 ###
 
 # @name updateDiviziaBulk
-POST {{ApiBaseUrl}}/api/divizia/bulk
+POST {{ApiBaseUrl}}{{Divizia}}bulk
 Content-Type: application/json
 
 [
@@ -29,5 +29,5 @@ Content-Type: application/json
 ###
 
 # @name getDivizia
-Get {{ApiBaseUrl}}/api/divizia/{{GetKod}}
+Get {{ApiBaseUrl}}{{Divizia}}{{GetKod}}
 

@@ -1,7 +1,7 @@
 
 
 # @name createFirma
-POST {{ApiBaseUrl}}/api/firma
+POST {{ApiBaseUrl}}{{Firma}}
 Content-Type: application/json
 
 {{newFirma}}
@@ -9,10 +9,10 @@ Content-Type: application/json
 ###
 
 # @name deleteFirma
-Delete {{ApiBaseUrl}}/api/firma/{{GetFirma}}
+Delete {{ApiBaseUrl}}{{Firma}}{{GetFirma}}
 
 ###
 # @name getFirma
-GET {{ApiBaseUrl}}/api/firma/{{GetFirma}}
+GET {{ApiBaseUrl}}{{Firma}}{{GetFirma}}
 
 

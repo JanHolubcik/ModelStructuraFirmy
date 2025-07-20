@@ -7,6 +7,13 @@ tp.Test("Vytvor Oddelenie. (200)", () =>
 
 });
 
-
+await tp.Test("Vymaz Oddelenie (200)", async () =>
+{
+    var statusCode = tp.Responses["deleteOddelenie"].StatusCode();
+    var statusCodeGet = tp.Responses["getOddelenie"].StatusCode();
+    Equal(200, statusCode);
+    Equal(404, statusCodeGet);
+    tp.Logger.LogInformation("Test prebehol uspesne.");
+});
 
 

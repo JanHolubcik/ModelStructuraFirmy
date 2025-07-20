@@ -1,15 +1,18 @@
 
 
-# @name createDivizia
-POST {{ApiBaseUrl}}/api/divizia
+# @name createProjekt
+POST {{ApiBaseUrl}}{{Projekt}}
 Content-Type: application/json
 
-{{deleteDivizia}}
+{{newProjekt}}
 
 ###
 
-# @name deleteDivizia
-Delete {{ApiBaseUrl}}/api/divizia/{{GetKod}}
+# @name deleteProjekt
+Delete {{ApiBaseUrl}}{{Projekt}}{{GetKod}}
 
 
+###
+# @name getProjekt
+GET {{ApiBaseUrl}}{{Projekt}}{{GetKod}}
 

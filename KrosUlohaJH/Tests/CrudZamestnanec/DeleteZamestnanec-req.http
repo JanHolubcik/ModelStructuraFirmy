@@ -1,7 +1,7 @@
 
 
 # @name createZamestnanec
-POST {{ApiBaseUrl}}/api/zamestnanec
+POST {{ApiBaseUrl}}{{Zamestnanec}}
 Content-Type: application/json
 
 {{NewZamestnanec}}
@@ -9,7 +9,10 @@ Content-Type: application/json
 ###
 
 # @name deleteUser
-Delete {{ApiBaseUrl}}/api/zamestnanec?rc={{DeleteZamestnanec}}
+Delete {{ApiBaseUrl}}{{Zamestnanec}}?rc={{GetKod}}
 
+###
+# @name getUser
+GET {{ApiBaseUrl}}{{Zamestnanec}}?rc={{GetKod}}
 
 

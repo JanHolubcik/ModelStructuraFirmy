@@ -1,23 +1,38 @@
-tp.Test("Update zamestnanca failne, lebo sa snazim updatnut neexistujuce zamestnanca (400)", () =>
+tp.Test("Update zamestnanca failne, lebo sa snazim updatnut neexistujuce zamestnanca (200)", () =>
 {
     // Access named responses using their names.
-    var statusCode = tp.Responses["updateZamestnanec"].StatusCode();
-    Equal(400, statusCode);
+    var statusCode = tp.Responses["newZamestnanec"].StatusCode();
+    Equal(200, statusCode);
     tp.Logger.LogInformation("Test prebehol uspesne.");
 });
 
-await tp.Test("Update by mal mat toto rodne cislo v errors 990401/9999. lebo sa nachadza v databaze (200)", async () =>
-{
-    dynamic responseJson = await tp.Responses["updateZamestnanecBulk"].GetBodyAsExpandoAsync();
-    string firstErrorRodneCislo = responseJson.chyby[0].rodneCislo;
-    Equal("990401/9999", firstErrorRodneCislo);
-    tp.SetVariable("GetRC", firstErrorRodneCislo);
+var newFirma = tp.GetVariable<string>("NewZamestnanec");
+dynamic obj = newFirma.ToExpando();
 
+var Priezvisko = obj.Priezvisko;
+var meno = obj.Meno;
+var Email = obj.Email;
+var Titul = obj.Titul;
+
+
+
+await tp.Test("Update by mal obsahovat pocet uspesnich 1 a neuspesnych 1, kvoli zle zadanemu rodnemu cislu. ", async () =>
+{
+    dynamic responseJsonBulk = await tp.Responses["updateZamestnanecBulk"].GetBodyAsExpandoAsync();
+    dynamic responseJsonNew = await tp.Responses["getUser"].GetBodyAsExpandoAsync();
+
+    var uspesne = responseJsonBulk.uspesne;
+    var neuspesne = responseJsonBulk.neuspesne;
+
+    NotEqual(Priezvisko, responseJsonNew.Priezvisko);
+    NotEqual(Email, responseJsonNew.Email);
+    NotEqual(Titul, responseJsonNew.Titul);
+    NotEqual(Email, responseJsonNew.Email);
+
+    Equal(1L, Convert.ToInt64(uspesne));
+    Equal(1L, Convert.ToInt64(neuspesne));
 
 });
 
-var newZamestnanec = tp.GetVariable<string>("NewZamestnanec");
-dynamic obj = newZamestnanec.ToExpando();
-var rc = obj.RodneCislo;
 
 

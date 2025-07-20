@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -31,8 +32,9 @@ namespace KrosUlohaJH.Controllers
                 Email = zamestnanecDTO.Email,
                 Meno = zamestnanecDTO.Meno,
                 Priezvisko = zamestnanecDTO.Priezvisko,
-                
-            };
+                 TelefonneCislo = zamestnanecDTO.TelefonneCislo,
+
+    };
             var (success, result) = await CreateOrUpdate(zamestnanec);
             return result;
         }
@@ -112,6 +114,23 @@ namespace KrosUlohaJH.Controllers
                 if (zamestnanec.OddelenieId.HasValue)
                     existujuci.OddelenieId = zamestnanec.OddelenieId;
 
+                if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo)) {
+               
+                        if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
+                        {
+                            return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
+                        }
+                    
+                    var existujeTelefon = await _context.Zamestnanci
+                         .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
+                    if (existujeTelefon)
+                    {
+                        return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
+                    }
+                    existujuci.TelefonneCislo = zamestnanec.TelefonneCislo;
+                }
+                    
+
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci));
             }
@@ -124,6 +143,19 @@ namespace KrosUlohaJH.Controllers
                 resultsEdit,
                 validateAllProperties: true
             );
+            if (!string.IsNullOrEmpty(zamestnanec.TelefonneCislo))
+            {
+                if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
+                {
+                    return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
+                }
+            var existuje = await _context.Zamestnanci
+                 .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
+                if (existuje)
+                {
+                    return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
+                }
+            }
 
             if (!isValidEdit)
             {
@@ -196,8 +228,8 @@ public class ZamestnanecDto
     public  string? Priezvisko { get; set; }
 
     public string? Email { get; set; }
-    public string? Titul { get; set; } 
-
+    public string? Titul { get; set; }
+    public string? TelefonneCislo { get; set; }
     public int? OddelenieId { get; set; }
 
 }
