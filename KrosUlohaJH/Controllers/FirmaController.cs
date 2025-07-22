@@ -97,27 +97,13 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            var contextEdit = new ValidationContext(Firma);
-            var resultsEdit = new List<ValidationResult>();
-            bool isValidEdit = Validator.TryValidateObject(
-                Firma,
-                contextEdit,
-                resultsEdit,
-                validateAllProperties: true
-            );
+            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Firma, ModelState);
 
-            if (!isValidEdit)
+            if (!isValid)
             {
-                foreach (var validationResult in resultsEdit)
-                {
-                    foreach (var memberName in validationResult.MemberNames)
-                    {
-                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
-                    }
-                }
-
-                return (false, new BadRequestObjectResult(ModelState));
+                return (isValid, new BadRequestObjectResult(modelState));
             }
+
 
 
             _context.Firmy.Add(Firma);

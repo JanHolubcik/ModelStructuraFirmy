@@ -69,7 +69,7 @@ namespace KrosUlohaJH.Controllers
         {
             if (!string.IsNullOrWhiteSpace(Projekt.VeduciProjektuRC))
             {
-                // If provided, check if it exists in Zamestnanci
+
                 var exists = await _context.Zamestnanci
                     .AnyAsync(z => z.RodneCislo == Projekt.VeduciProjektuRC);
 
@@ -90,26 +90,11 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            var contextEdit = new ValidationContext(Projekt);
-            var resultsEdit = new List<ValidationResult>();
-            bool isValidEdit = Validator.TryValidateObject(
-                Projekt,
-                contextEdit,
-                resultsEdit,
-                validateAllProperties: true
-            );
+            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Projekt, ModelState);
 
-            if (!isValidEdit)
+            if (!isValid)
             {
-                foreach (var validationResult in resultsEdit)
-                {
-                    foreach (var memberName in validationResult.MemberNames)
-                    {
-                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
-                    }
-                }
-
-                return (false, new BadRequestObjectResult(ModelState));
+                return (isValid, new BadRequestObjectResult(modelState));
             }
 
             // Skontroluj email

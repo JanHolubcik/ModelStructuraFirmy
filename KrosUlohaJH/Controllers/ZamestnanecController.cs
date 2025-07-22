@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Xunit.Sdk;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -82,7 +83,13 @@ namespace KrosUlohaJH.Controllers
 
             var context = new ValidationContext(zamestnanec) { MemberName = nameof(Zamestnanec.RodneCislo) };
             var results = new List<ValidationResult>();
-            bool isValid = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
+            bool isValidRC = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
+
+            if (!isValidRC)
+            {
+                var chyba = results.First().ErrorMessage;
+                return (false, new BadRequestObjectResult(new { sprava = chyba }));
+            }
 
             if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
             {
@@ -100,12 +107,6 @@ namespace KrosUlohaJH.Controllers
                 }
             }
 
-            if (!isValid)
-            {
-                var chyba = results.First().ErrorMessage;
-                return (false, new BadRequestObjectResult(new { sprava = chyba }));
-            }
-
             var existujuci = await _context.Zamestnanci
                 .FirstOrDefaultAsync(z => z.RodneCislo == zamestnanec.RodneCislo);
 
@@ -121,27 +122,11 @@ namespace KrosUlohaJH.Controllers
                 return (true, new OkObjectResult(existujuci));
             }
 
-            var contextEdit = new ValidationContext(zamestnanec);
-            var resultsEdit = new List<ValidationResult>();
-            bool isValidEdit = Validator.TryValidateObject(
-                zamestnanec,
-                contextEdit,
-                resultsEdit,
-                validateAllProperties: true
-            );
+            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(zamestnanec, ModelState);
 
-
-            if (!isValidEdit)
+            if (!isValid)
             {
-                foreach (var validationResult in resultsEdit)
-                {
-                    foreach (var memberName in validationResult.MemberNames)
-                    {
-                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
-                    }
-                }
-
-                return (false, new BadRequestObjectResult(ModelState));
+                return (isValid, new BadRequestObjectResult(modelState));
             }
 
             if (await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email))

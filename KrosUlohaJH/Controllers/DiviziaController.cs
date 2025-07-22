@@ -97,26 +97,11 @@ namespace KrosUlohaJH.Controllers
             }
 
 
-            var contextEdit = new ValidationContext(Divizia);
-            var resultsEdit = new List<ValidationResult>();
-            bool isValidEdit = Validator.TryValidateObject(
-                Divizia,
-                contextEdit,
-                resultsEdit,
-                validateAllProperties: true
-            );
+            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Divizia, ModelState);
 
-            if (!isValidEdit)
+            if (!isValid)
             {
-                foreach (var validationResult in resultsEdit)
-                {
-                    foreach (var memberName in validationResult.MemberNames)
-                    {
-                        ModelState.AddModelError(memberName, validationResult.ErrorMessage);
-                    }
-                }
-
-                return (false, new BadRequestObjectResult(ModelState));
+                return (isValid, new BadRequestObjectResult(modelState));
             }
 
             // Skontroluj email
