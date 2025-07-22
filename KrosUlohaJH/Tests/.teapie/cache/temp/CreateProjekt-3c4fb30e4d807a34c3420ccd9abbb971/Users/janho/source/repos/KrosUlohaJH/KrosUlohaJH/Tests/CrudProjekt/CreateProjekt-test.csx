@@ -7,7 +7,7 @@ tp.Test("Vytvor projekt. (201)", () =>
 var newFirma = tp.GetVariable<string>("newProjekt");
 dynamic obj = newFirma.ToExpando();
 var kod = obj.kod;
-await tp.Test($"Divizia je vytvorena s timto kodom  .", async () =>
+await tp.Test($"Projekt je vytvoreny s timto kodom '{kod}' .", async () =>
 {
     dynamic responseJson = await tp.Responses["getProjekt"].GetBodyAsExpandoAsync();
     Console.WriteLine("Raw response: " + responseJson);

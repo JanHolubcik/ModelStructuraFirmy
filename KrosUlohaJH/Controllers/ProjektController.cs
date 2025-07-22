@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Models; 
+﻿using KrosUlohaJH.Helpers;
+using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -83,20 +84,7 @@ namespace KrosUlohaJH.Controllers
             if (existujuci != null)
             {
 
-
-                //aktualizuj hodnoty
-                if (!string.IsNullOrWhiteSpace(Projekt.Nazov))
-                    existujuci.Nazov = Projekt.Nazov;
-
-
-
-                if (!string.IsNullOrWhiteSpace(Projekt.VeduciProjektuRC))
-                    existujuci.VeduciProjektuRC = Projekt.VeduciProjektuRC;
-
-                if (Projekt.DiviziaId.HasValue)
-                    existujuci.DiviziaId = Projekt.DiviziaId;
-
-
+                ReplaceValuesOfObject.UpdateNonNullProperties<Projekt>(existujuci, Projekt, new[] { "Id", "Kod" });
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci)); ;
             }

@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Models;
+﻿using KrosUlohaJH.Helpers;
+using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -80,29 +81,17 @@ namespace KrosUlohaJH.Controllers
                     return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
             }
 
+            var veduciExistuje = await _context.Firmy
+            .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
+
+            if (veduciExistuje)
+            {
+                return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
+            }
+
             if (existujuci != null)
             {
-
-
-
-                //aktualizuj hodnoty
-                if (!string.IsNullOrWhiteSpace(Firma.Nazov))
-                    existujuci.Nazov = Firma.Nazov;
-
-
-
-                if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
-                    existujuci.RiaditelRc = Firma.RiaditelRc;
-
-                var priradenyRiaditel = await _context.Firmy
-               .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
-
-                if (priradenyRiaditel)
-                {
-                    return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
-                }
-
-
+                ReplaceValuesOfObject.UpdateNonNullProperties<Firma>(existujuci, Firma, new[] { "Id", "Kod" });
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci)); ;
             }
@@ -130,18 +119,7 @@ namespace KrosUlohaJH.Controllers
                 return (false, new BadRequestObjectResult(ModelState));
             }
 
-            // Skontroluj email
-            if (await _context.Firmy.AnyAsync(u => u.Kod == Firma.Kod))
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Firma už existuje" }));
-            }
-            var veduciExistuje = await _context.Firmy
-    .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
 
-            if (veduciExistuje)
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
-            }
             _context.Firmy.Add(Firma);
             await _context.SaveChangesAsync();
 

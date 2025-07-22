@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Models;
+﻿using KrosUlohaJH.Helpers;
+using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -82,32 +83,18 @@ namespace KrosUlohaJH.Controllers
                     return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
             }
 
-
             var existujuci = await _context.Divizie
                 .FirstOrDefaultAsync(z => z.Kod == Divizia.Kod);
-
 
 
             if (existujuci != null)
             {
 
-
-
-                if (!string.IsNullOrWhiteSpace(Divizia.Nazov))
-                    existujuci.Nazov = Divizia.Nazov;
-
-
-
-                if (!string.IsNullOrWhiteSpace(Divizia.VeduciRC))
-                    existujuci.VeduciRC = Divizia.VeduciRC;
-
-                if (Divizia.FirmaId.HasValue)
-                    existujuci.FirmaId = Divizia.FirmaId;
+                ReplaceValuesOfObject.UpdateNonNullProperties<Divizia>(existujuci, Divizia, new[] { "Id", "Kod" });
 
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci)); ;
             }
-
 
 
             var contextEdit = new ValidationContext(Divizia);

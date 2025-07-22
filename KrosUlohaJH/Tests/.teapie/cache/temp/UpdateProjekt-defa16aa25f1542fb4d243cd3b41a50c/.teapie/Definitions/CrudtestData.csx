@@ -19,3 +19,13 @@ ProjektTest ProjektCrud = new ProjektTest
     DiviziaId = 1,
     VeduciProjektuRC = "870927/4444"
 };
+ZamestnanecTest ZamestnanecCrud = new ZamestnanecTest
+{
+    RodneCislo = "990401/4834",
+    Meno = "Skusony",
+    Priezvisko = "Priezvisko",
+    Email = "SK.PR@examsple.com",
+    Titul = "MGLR.",
+    TelefonneCislo = "+421940123457",
+    OddelenieId = 1,
+};

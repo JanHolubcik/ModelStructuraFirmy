@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Models; 
+﻿using KrosUlohaJH.Helpers;
+using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -83,6 +84,22 @@ namespace KrosUlohaJH.Controllers
             var results = new List<ValidationResult>();
             bool isValid = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
 
+            if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
+            {
+
+                if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
+                {
+                    return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
+                }
+
+                var existujeTelefon = await _context.Zamestnanci
+                     .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
+                if (existujeTelefon)
+                {
+                    return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
+                }
+            }
+
             if (!isValid)
             {
                 var chyba = results.First().ErrorMessage;
@@ -99,37 +116,7 @@ namespace KrosUlohaJH.Controllers
                 {
                     return (false, new ConflictObjectResult(new { sprava = "Tento email už je zaregistrovaný." }));
                 }
-
-                // aktualizuj hodnoty
-                if (!string.IsNullOrWhiteSpace(zamestnanec.Meno))
-                    existujuci.Meno = zamestnanec.Meno;
-                if (!string.IsNullOrWhiteSpace(zamestnanec.Priezvisko))
-                    existujuci.Priezvisko = zamestnanec.Priezvisko;
-                if (!string.IsNullOrWhiteSpace(zamestnanec.Email))
-                    existujuci.Email = zamestnanec.Email;
-                if (!string.IsNullOrWhiteSpace(zamestnanec.Titul))
-                    existujuci.Titul = zamestnanec.Titul;
-                if (zamestnanec.OddelenieId.HasValue)
-                    existujuci.OddelenieId = zamestnanec.OddelenieId;
-
-                if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
-                {
-
-                    if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
-                    {
-                        return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
-                    }
-
-                    var existujeTelefon = await _context.Zamestnanci
-                         .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
-                    if (existujeTelefon)
-                    {
-                        return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
-                    }
-                    existujuci.TelefonneCislo = zamestnanec.TelefonneCislo;
-                }
-
-
+                ReplaceValuesOfObject.UpdateNonNullProperties<Zamestnanec>(existujuci, zamestnanec, new[] { "RodneCislo" });
                 await _context.SaveChangesAsync();
                 return (true, new OkObjectResult(existujuci));
             }
@@ -142,19 +129,7 @@ namespace KrosUlohaJH.Controllers
                 resultsEdit,
                 validateAllProperties: true
             );
-            if (!string.IsNullOrEmpty(zamestnanec.TelefonneCislo))
-            {
-                if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
-                {
-                    return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
-                }
-                var existuje = await _context.Zamestnanci
-                     .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo);
-                if (existuje)
-                {
-                    return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
-                }
-            }
+
 
             if (!isValidEdit)
             {
@@ -168,11 +143,6 @@ namespace KrosUlohaJH.Controllers
 
                 return (false, new BadRequestObjectResult(ModelState));
             }
-
-
-            // ModelState.IsValid použijem len v prípade ak rovno posielam Objekt triedy nie je DTO
-            //if (!ModelState.IsValid)
-            //    return (false, new BadRequestObjectResult(ModelState));
 
             if (await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email))
                 return (false, new ConflictObjectResult(new { sprava = "Tento email už je zaregistrovaný." }));
