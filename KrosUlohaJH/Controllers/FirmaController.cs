@@ -31,13 +31,13 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkFirma([FromBody] List<FirmaDto> FirmaDTO)
+        public async Task<IActionResult> PostBulkFirma([FromBody] List<FirmaDto> Firma)
         {
             var errors = new List<object>();
             var success = new List<Firma>();
             var mapper = MapperConfig.InitializeAutomapper();
 
-            foreach (var firma in FirmaDTO)
+            foreach (var FirmaDTO in Firma)
             {
                 var z = mapper.Map<Firma>(FirmaDTO);
                 var (ok, result) = await CreateOrUpdate(z);
@@ -150,6 +150,7 @@ namespace KrosUlohaJH.Controllers
 
 public class FirmaDto
 {
+    public int? Id { get; set; }
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<DiviziaDto>? Divizie { get; set; }

@@ -72,7 +72,7 @@ namespace KrosUlohaJH.Controllers
             var existujuci = await _context.Oddelenia
                 .FirstOrDefaultAsync(z => z.Kod == Oddelenie.Kod);
 
-            if (existujuci != null)
+            if (existujuci != null) 
             {
 
                 ReplaceValuesOfObject.UpdateNonNullProperties<Oddelenie>(existujuci, Oddelenie, new[] { "Id", "Kod" });

@@ -19,6 +19,7 @@ namespace KrosUlohaJH.Helpers
                 cfg.CreateMap<ZamestnanecDto, Zamestnanec>();
                 cfg.CreateMap<DiviziaDto, Divizia>();
                 cfg.CreateMap<FirmaDto, Firma>();
+                cfg.CreateMap<Firma, FirmaDto>();
                 cfg.CreateMap<OddeleniaDto, Oddelenie>();
                 cfg.CreateMap<ProjektDto, Projekt>();
             }, loggerFactory);
