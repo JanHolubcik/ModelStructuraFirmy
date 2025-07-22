@@ -22,15 +22,8 @@ namespace KrosUlohaJH.Controllers
         {
 
 
-            var Divizia = new Divizia
-            {
-                Kod = DiviziaDto.Kod,
-                FirmaId = DiviziaDto.FirmaId,
-                Nazov = DiviziaDto.Nazov,
-                VeduciRC = DiviziaDto.VeduciRC,
-
-
-            };
+            var mapper = MapperConfig.InitializeAutomapper();
+            var Divizia = mapper.Map<Divizia>(DiviziaDto);
             var (success, result) = await CreateOrUpdate(Divizia);
             return result;
         }
@@ -40,19 +33,12 @@ namespace KrosUlohaJH.Controllers
         {
             var errors = new List<object>();
             var success = new List<Divizia>();
+            var mapper = MapperConfig.InitializeAutomapper();
 
             foreach (var DiviziaDto in Divizia)
             {
 
-                var z = new Divizia
-                {
-                    Kod = DiviziaDto.Kod,
-                    FirmaId = DiviziaDto.FirmaId,
-                    Nazov = DiviziaDto.Nazov,
-                    VeduciRC = DiviziaDto.VeduciRC,
-
-
-                };
+                var z = mapper.Map<Divizia>(DiviziaDto);
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Divizia zam)

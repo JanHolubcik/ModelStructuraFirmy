@@ -22,13 +22,10 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Firma>> PostOrUpdateFirma(FirmaDto FirmaDTO)
         {
-            var Firma = new Firma
-            {
-                Kod = FirmaDTO.Kod,
-                Nazov = FirmaDTO.Nazov,
-                RiaditelRc = FirmaDTO.RiaditelRc,
 
-            };
+            var mapper = MapperConfig.InitializeAutomapper();
+            var Firma = mapper.Map<Firma>(FirmaDTO);
+
             var (success, result) = await CreateOrUpdate(Firma);
             return result;
         }
@@ -38,16 +35,11 @@ namespace KrosUlohaJH.Controllers
         {
             var errors = new List<object>();
             var success = new List<Firma>();
+            var mapper = MapperConfig.InitializeAutomapper();
 
             foreach (var firma in FirmaDTO)
             {
-                var z = new Firma
-                {
-                    Kod = firma.Kod,
-                    Nazov = firma.Nazov,
-                    RiaditelRc = firma.RiaditelRc,
-
-                };
+                var z = mapper.Map<Firma>(FirmaDTO);
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Firma zam)

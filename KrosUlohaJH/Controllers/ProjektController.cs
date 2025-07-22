@@ -22,13 +22,8 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Projekt>> PostOrUpdateProjekt(ProjektDto ProjektDTO)
         {
-            Projekt Projekt = new Projekt
-            {
-                Kod = ProjektDTO.Kod,
-                Nazov = ProjektDTO.Nazov,
-                DiviziaId = ProjektDTO.DiviziaId,
-                VeduciProjektuRC = ProjektDTO.VeduciProjektuRC,
-            };
+            var mapper = MapperConfig.InitializeAutomapper();
+            var Projekt = mapper.Map<Projekt>(ProjektDTO);
             var (success, result) = await CreateOrUpdate(Projekt);
             return result;
         }
@@ -39,16 +34,12 @@ namespace KrosUlohaJH.Controllers
             var errors = new List<object>();
             var success = new List<Projekt>();
 
+            var mapper = MapperConfig.InitializeAutomapper();
+
             foreach (var projektDto in Projekt)
             {
 
-                Projekt z = new Projekt
-                {
-                    Kod = projektDto.Kod,
-                    Nazov = projektDto.Nazov,
-                    DiviziaId = projektDto.DiviziaId,
-                    VeduciProjektuRC = projektDto.VeduciProjektuRC,
-                };
+                var z = mapper.Map<Projekt>(projektDto);
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Projekt zam)

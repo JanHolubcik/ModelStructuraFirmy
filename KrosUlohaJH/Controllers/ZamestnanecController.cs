@@ -23,17 +23,8 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Zamestnanec>> PostOrUpdateZamestnanec(ZamestnanecDto zamestnanecDTO)
         {
-            var zamestnanec = new Zamestnanec
-            {
-                RodneCislo = zamestnanecDTO.RodneCislo,
-                Titul = zamestnanecDTO.Titul,
-                OddelenieId = zamestnanecDTO.OddelenieId,
-                Email = zamestnanecDTO.Email,
-                Meno = zamestnanecDTO.Meno,
-                Priezvisko = zamestnanecDTO.Priezvisko,
-                TelefonneCislo = zamestnanecDTO.TelefonneCislo,
-
-            };
+            var mapper = MapperConfig.InitializeAutomapper();
+            var zamestnanec = mapper.Map<Zamestnanec>(zamestnanecDTO);
             var (success, result) = await CreateOrUpdate(zamestnanec);
             return result;
         }
@@ -43,20 +34,12 @@ namespace KrosUlohaJH.Controllers
         {
             var errors = new List<object>();
             var success = new List<Zamestnanec>();
+            var mapper = MapperConfig.InitializeAutomapper();
 
             foreach (var zamestnanecDTO in zamestnanci)
             {
-                var zamestnanec = new Zamestnanec
-                {
-                    RodneCislo = zamestnanecDTO.RodneCislo,
-                    Titul = zamestnanecDTO.Titul,
-                    OddelenieId = zamestnanecDTO.OddelenieId,
-                    Email = zamestnanecDTO.Email,
-                    Meno = zamestnanecDTO.Meno,
-                    Priezvisko = zamestnanecDTO.Priezvisko,
-                    TelefonneCislo = zamestnanecDTO.TelefonneCislo,
+                var zamestnanec = mapper.Map<Zamestnanec>(zamestnanecDTO);
 
-                };
                 var (ok, result) = await CreateOrUpdate(zamestnanec);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Zamestnanec zam)

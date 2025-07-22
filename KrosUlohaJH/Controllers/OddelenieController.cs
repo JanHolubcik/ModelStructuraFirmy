@@ -21,16 +21,9 @@ namespace KrosUlohaJH.Controllers
         [HttpPost]
         public async Task<ActionResult<Oddelenie>> PostOrUpdateOddelenie(OddeleniaDto OddelenieDto)
         {
-            var Oddelenie = new Oddelenie
-            {
-                Kod = OddelenieDto.Kod,
-                ProjektId = OddelenieDto.ProjektId,
-                Nazov = OddelenieDto.Nazov,
-                VeduciOddeleniaRc = OddelenieDto.VeduciOddeleniaRc,
 
-
-            };
-
+            var mapper = MapperConfig.InitializeAutomapper();
+            var Oddelenie = mapper.Map<Oddelenie>(OddelenieDto);
             var (success, result) = await CreateOrUpdate(Oddelenie);
             return result;
         }
@@ -40,19 +33,12 @@ namespace KrosUlohaJH.Controllers
         {
             var errors = new List<object>();
             var success = new List<Oddelenie>();
-
+            var mapper = MapperConfig.InitializeAutomapper();
+          
             foreach (var OddelenieDto in Oddelenia)
             {
 
-                var z = new Oddelenie
-                {
-                    Kod = OddelenieDto.Kod,
-                    ProjektId = OddelenieDto.ProjektId,
-                    Nazov = OddelenieDto.Nazov,
-                    VeduciOddeleniaRc = OddelenieDto.VeduciOddeleniaRc,
-
-
-                };
+                var z = mapper.Map<Oddelenie>(OddelenieDto);
                 var (ok, result) = await CreateOrUpdate(z);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Oddelenie zam)
