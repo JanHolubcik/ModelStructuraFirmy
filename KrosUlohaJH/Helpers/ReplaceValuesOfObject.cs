@@ -19,22 +19,26 @@ namespace KrosUlohaJH.Helpers
 
             var exclusions = excludedProperties?.ToHashSet() ?? new HashSet<string>();
             // Načítavam properties
-            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead && p.CanWrite && !exclusions.Contains(p.Name));
+            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            foreach (var prop in properties)
+            foreach (var property in properties)
             {
-                var value = prop.GetValue(source);
-
-
-                if (value == null)
+  
+                if (exclusions.Contains(property.Name))
                     continue;
 
-
-                if (prop.PropertyType == typeof(string) && string.IsNullOrWhiteSpace(value as string))
+    
+                if (!property.CanWrite || !property.CanRead)
                     continue;
 
-                prop.SetValue(target, value);
+          
+                var sourceValue = property.GetValue(target);
+
+      
+                if (sourceValue == null)
+                    continue;
+
+                property.SetValue(source, sourceValue);
             }
         }
     }
