@@ -146,6 +146,8 @@ namespace KrosUlohaJH.Controllers
 
 public class ProjektDto
 {
+    public int Id { get; set; }
+
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<OddeleniaDto>? Projekty { get; set; }

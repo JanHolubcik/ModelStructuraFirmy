@@ -152,6 +152,8 @@ namespace KrosUlohaJH.Controllers
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria
 public class OddeleniaDto
 {
+    public int Id { get; set; }
+
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
 

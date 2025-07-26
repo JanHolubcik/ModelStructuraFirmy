@@ -3,16 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KrosUlohaJH.Models
 {
-    public class Projekt
+    public class Projekt : BaseModel
     {
-        public int Id { get; set; }
-
-        [Required]
-        public required string Nazov { get; set; }
-
-        [Required]
-        public required string Kod { get; set; }
-
         public int? DiviziaId { get; set; }
 
         public Divizia? Divizia { get; set; }

@@ -112,6 +112,7 @@ namespace KrosUlohaJH.Controllers
                 .Include(d => d.Projekty)
                 .Select(d => new DiviziaDto
                 {
+                    
                     Kod = d.Kod,
                     Nazov = d.Nazov,
                     Projekty = d.Projekty.Select(p => new ProjektDto
@@ -150,6 +151,7 @@ namespace KrosUlohaJH.Controllers
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria
 public class DiviziaDto
 {
+    public int Id { get; set; }
     public string? Kod { get; set; }
     public string? Nazov { get; set; }
     public List<ProjektDto>? Projekty { get; set; }

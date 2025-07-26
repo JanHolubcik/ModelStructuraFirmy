@@ -157,6 +157,7 @@ namespace KrosUlohaJH.Controllers
 
 public class ZamestnanecDto
 {
+    public int Id { get; set; }
 
     public string? RodneCislo { get; set; }
 
