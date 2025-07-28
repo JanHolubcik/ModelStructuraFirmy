@@ -31,28 +31,7 @@ namespace KrosUlohaJH.Controllers
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkDivizia([FromBody] List<DiviziaDto> Divizia)
         {
-            var errors = new List<object>();
-            var success = new List<Divizia>();
-            var mapper = MapperConfig.InitializeAutomapper();
-
-            foreach (var DiviziaDto in Divizia)
-            {
-
-                var z = mapper.Map<Divizia>(DiviziaDto);
-                var (ok, result) = await CreateOrUpdate(z);
-
-                if (ok && result is ObjectResult r1 && r1.Value is Divizia zam)
-                    success.Add(zam);
-                else
-                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
-            }
-
-            return Ok(new
-            {
-                uspesne = success.Count,
-                neuspesne = errors.Count,
-                chyby = errors
-            });
+            return await BulkHelper.PostBulk<DiviziaDto, Divizia>(Divizia, CreateOrUpdate);
         }
 
         private async Task<(bool success, ActionResult response)> CreateOrUpdate(Divizia Divizia)
@@ -149,11 +128,9 @@ namespace KrosUlohaJH.Controllers
 }
 
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria
-public class DiviziaDto
+public class DiviziaDto : BaseModel
 {
-    public int Id { get; set; }
-    public string? Kod { get; set; }
-    public string? Nazov { get; set; }
+
     public List<ProjektDto>? Projekty { get; set; }
 
     public int? FirmaId { get; set; }
