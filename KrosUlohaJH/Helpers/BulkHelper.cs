@@ -5,10 +5,9 @@ namespace KrosUlohaJH.Helpers
 {
     public class BulkHelper
     {
-
-        public async Task<IActionResult> PostBulk<T, TEntity>(List<T> model, Func<TEntity, Task<(bool, IActionResult)>> CreateOrUpdate)
-            where T : BaseModel //  T definujem ako BaseModel
-            where TEntity : BaseModel 
+        public static async Task<IActionResult> PostBulk<T, TEntity>(List<T> model, Func<TEntity, Task<(bool success, ActionResult response)>> CreateOrUpdate)
+     where T : BaseModel
+     where TEntity : BaseModel
         {
             var errors = new List<object>();
             var success = new List<T>();
@@ -36,6 +35,8 @@ namespace KrosUlohaJH.Helpers
                 neuspesne = errors.Count,
                 chyby = errors
             });
-        }
+        
     }
+    }
+    
 }

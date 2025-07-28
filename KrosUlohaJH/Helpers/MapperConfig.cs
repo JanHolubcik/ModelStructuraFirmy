@@ -8,7 +8,7 @@ namespace KrosUlohaJH.Helpers
     {
         public static Mapper InitializeAutomapper()
         {
-            //Provide all the Mapping Configuration
+         
             var loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.AddConsole();
@@ -18,12 +18,14 @@ namespace KrosUlohaJH.Helpers
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ZamestnanecDto, Zamestnanec>();
                 cfg.CreateMap<DiviziaDto, Divizia>();
+                cfg.CreateMap<Divizia, DiviziaDto>();
                 cfg.CreateMap<FirmaDto, Firma>();
                 cfg.CreateMap<Firma, FirmaDto>();
                 cfg.CreateMap<OddeleniaDto, Oddelenie>();
                 cfg.CreateMap<ProjektDto, Projekt>();
+                cfg.CreateMap<Projekt, ProjektDto>();
             }, loggerFactory);
-            //Create an Instance of Mapper and return that Instance
+         
             var mapper = new Mapper(config);
             return mapper;
         }
