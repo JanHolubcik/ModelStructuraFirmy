@@ -1,4 +1,4 @@
-# Zadanie kros
+# Štruktúra firmy
 
 ## Prerequisites
 .Net 9.0
