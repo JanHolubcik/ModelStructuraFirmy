@@ -7,6 +7,7 @@ Použité technológie: **C# (ASP.NET)**,  **Microsoft SQL Server** a **TeaPie**
 
 Predtým ako sa spustí inicializácia, by sa mala vytvoriť databáza cez:
 
+Pre spustenie testov treba nainštalovať Teapie: https://github.com/Kros-sk/TeaPie?tab=readme-ov-file
 ```sh
 update-database
 ```
