@@ -31,29 +31,7 @@ namespace KrosUlohaJH.Controllers
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkProjekt([FromBody] List<ProjektDto> Projekt)
         {
-            var errors = new List<object>();
-            var success = new List<Projekt>();
-
-            var mapper = MapperConfig.InitializeAutomapper();
-
-            foreach (var projektDto in Projekt)
-            {
-
-                var z = mapper.Map<Projekt>(projektDto);
-                var (ok, result) = await CreateOrUpdate(z);
-
-                if (ok && result is ObjectResult r1 && r1.Value is Projekt zam)
-                    success.Add(zam);
-                else
-                    errors.Add(new { kod = z.Kod, chyba = (result as ObjectResult)?.Value });
-            }
-
-            return Ok(new
-            {
-                uspesne = success.Count,
-                neuspesne = errors.Count,
-                chyby = errors
-            });
+            return await BulkHelper.PostBulk<ProjektDto, Projekt>(Projekt, CreateOrUpdate);
         }
 
         private async Task<(bool success, ActionResult response)> CreateOrUpdate(Projekt Projekt)
@@ -144,12 +122,9 @@ namespace KrosUlohaJH.Controllers
 }
 
 
-public class ProjektDto
+public class ProjektDto : BaseModel
 {
-    public int Id { get; set; }
 
-    public string? Kod { get; set; }
-    public string? Nazov { get; set; }
     public List<OddeleniaDto>? Projekty { get; set; }
 
     public int? DiviziaId { get; set; }

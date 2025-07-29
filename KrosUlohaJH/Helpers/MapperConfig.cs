@@ -16,12 +16,19 @@ namespace KrosUlohaJH.Helpers
             });
 
             var config = new MapperConfiguration(cfg => {
+
                 cfg.CreateMap<ZamestnanecDto, Zamestnanec>();
+                cfg.CreateMap<Zamestnanec, ZamestnanecDto>();
+
                 cfg.CreateMap<DiviziaDto, Divizia>();
                 cfg.CreateMap<Divizia, DiviziaDto>();
+
                 cfg.CreateMap<FirmaDto, Firma>();
                 cfg.CreateMap<Firma, FirmaDto>();
+
                 cfg.CreateMap<OddeleniaDto, Oddelenie>();
+                cfg.CreateMap<Oddelenie, OddeleniaDto>();
+
                 cfg.CreateMap<ProjektDto, Projekt>();
                 cfg.CreateMap<Projekt, ProjektDto>();
             }, loggerFactory);
