@@ -125,7 +125,7 @@ namespace KrosUlohaJH.Controllers
 public class ProjektDto : BaseModel
 {
 
-    public List<OddeleniaDto>? Projekty { get; set; }
+    public List<OddeleniaDto>? Oddelenia { get; set; }
 
     public int? DiviziaId { get; set; }
 

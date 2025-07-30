@@ -108,6 +108,21 @@ namespace KrosUlohaJH.Controllers
             return Ok(divizia);
         }
 
+        [HttpGet()]
+        public async Task<ActionResult<DiviziaDto>> GetAllDivizia()
+        {
+            var mapper = MapperConfig.InitializeAutomapper();
+            var divizie = await _context.Divizie
+           .Include(d => d.Projekty) 
+           .ToListAsync();
+
+            var mappedBack = mapper.Map<List<DiviziaDto>>(divizie);
+
+            return Ok(mappedBack);
+
+         
+        }
+
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Divizia>> DeleteDivizia(string Kod)
         {
@@ -137,4 +152,5 @@ public class DiviziaDto : BaseModel
 
     public string? VeduciRC { get; set; }
 
+   
 }
