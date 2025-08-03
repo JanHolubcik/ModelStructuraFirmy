@@ -18,62 +18,42 @@ namespace KrosUlohaJH.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Projekt>> PostOrUpdateProjekt(ProjektDto ProjektDTO)
+        public async Task<ActionResult> CreateOrUpdateProjekt(Projekt projekt)
         {
-            var mapper = MapperConfig.InitializeAutomapper();
-            var Projekt = mapper.Map<Projekt>(ProjektDTO);
-            var (success, result) = await CreateOrUpdate(Projekt);
-            return result;
+            var result = await CreateOrUpdateProjektInternal(projekt);
+            return result.response;
         }
 
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkProjekt([FromBody] List<ProjektDto> Projekt)
         {
-            return await BulkHelper.PostBulk<ProjektDto, Projekt>(Projekt, CreateOrUpdate);
+            return await BulkHelper.PostBulk<ProjektDto, Projekt>(Projekt, CreateOrUpdateProjektInternal);
         }
 
-        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Projekt Projekt)
+        private async Task<(bool success, ActionResult response)> CreateOrUpdateProjektInternal(Projekt projekt)
         {
-            if (!string.IsNullOrWhiteSpace(Projekt.VeduciProjektuRC))
-            {
+            var (success, response) = await CreateOrUpdate(
+                entity: projekt,
+                keySelector: p => p.Kod,
+                keyValue: projekt.Kod,
+                excludedProperties: new[] { "Kod" },
+                customValidation: async (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.VeduciProjektuRC))
+                    {
+                        var exists = await _context.Zamestnanci
+                            .AnyAsync(z => z.RodneCislo == p.VeduciProjektuRC);
+                        if (!exists)
+                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
+                    }
+                    return (true, null);
+                },
+                getActionName: nameof(GetProjekt),
+                controllerName: "Projekt",
+                routeValues: new { kod = projekt.Kod }
+            );
 
-                var exists = await _context.Zamestnanci
-                    .AnyAsync(z => z.RodneCislo == Projekt.VeduciProjektuRC);
-
-                if (!exists)
-                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
-            }
-
-
-            var existujuci = await _context.Projekty
-                .FirstOrDefaultAsync(z => z.Kod == Projekt.Kod);
-
-            if (existujuci != null)
-            {
-
-                ReplaceValuesOfObject.UpdateNonNullProperties<Projekt>(existujuci, Projekt, new[] { "Id", "Kod" });
-                await _context.SaveChangesAsync();
-                return (true, new OkObjectResult(existujuci)); ;
-            }
-
-
-            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Projekt, ModelState);
-
-            if (!isValid)
-            {
-                return (isValid, new BadRequestObjectResult(modelState));
-            }
-
-            // Skontroluj email
-            if (await _context.Projekty.AnyAsync(u => u.Kod == Projekt.Kod))
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Projekt už existuje" }));
-            }
-
-            _context.Projekty.Add(Projekt);
-            await _context.SaveChangesAsync();
-
-            return (true, new CreatedAtActionResult(nameof(GetProjekt), "Projekt", new { kod = Projekt.Kod }, Projekt));
+            return (success, response);
         }
 
         [HttpGet("{kod}")]
@@ -130,7 +110,6 @@ namespace KrosUlohaJH.Controllers
 
 public class ProjektDto : BaseModel
 {
-
 
     public int? DiviziaId { get; set; }
 
