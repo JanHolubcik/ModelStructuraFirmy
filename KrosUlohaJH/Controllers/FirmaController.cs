@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -71,6 +72,7 @@ namespace KrosUlohaJH.Controllers
                 return (isValid, new BadRequestObjectResult(modelState));
             }
 
+
             _context.Firmy.Add(Firma);
             await _context.SaveChangesAsync();
 
@@ -102,6 +104,14 @@ namespace KrosUlohaJH.Controllers
             return Ok(divizia);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<FirmaDto>>> GetAll()
+        {
+            return await GetAllEntities<Firma, FirmaDto>(
+                _context.Firmy.Include(d => d.Divizie)
+            );
+        }
+
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Firma>> DeleteFirma(string Kod)
         {
@@ -123,9 +133,10 @@ namespace KrosUlohaJH.Controllers
 
 public class FirmaDto : BaseModel
 {
+ 
+    public string? RiaditelRc { get; set; }
+
+    [JsonPropertyOrder(100)]
     public List<DiviziaDto>? Divizie { get; set; }
-    public string? RiaditelRc { get; set; }  
-
-
 }
 

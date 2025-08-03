@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -99,6 +100,14 @@ namespace KrosUlohaJH.Controllers
             return Ok(projekt);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<ProjektDto>>> GetAll()
+        {
+            return await GetAllEntities<Projekt, ProjektDto>(
+                _context.Projekty.Include(d => d.Oddelenia)
+            );
+        }
+
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Projekt>> DeleteProjekt(string Kod)
         {
@@ -122,10 +131,12 @@ namespace KrosUlohaJH.Controllers
 public class ProjektDto : BaseModel
 {
 
-    public List<OddeleniaDto>? Oddelenia { get; set; }
 
     public int? DiviziaId { get; set; }
 
     public string? VeduciProjektuRC { get; set; }
+
+    [JsonPropertyOrder(100)]
+    public List<OddeleniaDto>? Oddelenia { get; set; }
 
 }

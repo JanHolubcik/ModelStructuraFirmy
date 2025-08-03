@@ -3,6 +3,7 @@ using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace KrosUlohaJH.Controllers
 {
@@ -106,19 +107,12 @@ namespace KrosUlohaJH.Controllers
             return Ok(divizia);
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<DiviziaDto>> GetAllDivizia()
+        [HttpGet]
+        public async Task<ActionResult<List<DiviziaDto>>> GetAll()
         {
-            var mapper = MapperConfig.InitializeAutomapper();
-            var divizie = await _context.Divizie
-           .Include(d => d.Projekty) 
-           .ToListAsync();
-
-            var mappedBack = mapper.Map<List<DiviziaDto>>(divizie);
-
-            return Ok(mappedBack);
-
-         
+            return await GetAllEntities<Divizia, DiviziaDto>(
+                _context.Divizie.Include(d => d.Projekty)
+            );
         }
 
         [HttpDelete("{kod}")]
@@ -144,11 +138,13 @@ namespace KrosUlohaJH.Controllers
 public class DiviziaDto : BaseModel
 {
 
-    public List<ProjektDto>? Projekty { get; set; }
+   
 
     public int? FirmaId { get; set; }
 
     public string? VeduciRC { get; set; }
-
    
+    [JsonPropertyOrder(100)]
+    public List<ProjektDto>? Projekty { get; set; }
+
 }

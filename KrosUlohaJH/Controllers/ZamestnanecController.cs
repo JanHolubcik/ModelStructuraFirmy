@@ -3,6 +3,7 @@ using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Xunit.Sdk;
 
@@ -30,6 +31,7 @@ namespace KrosUlohaJH.Controllers
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkZamestnanci([FromBody] List<ZamestnanecDto> zamestnanci)
         {
+            // nepoužívam bulk z helpera, kedže bulk používa rodneCislo namiesto kod
             var errors = new List<object>();
             var success = new List<Zamestnanec>();
             var mapper = MapperConfig.InitializeAutomapper();
@@ -133,6 +135,14 @@ namespace KrosUlohaJH.Controllers
             return Ok(zamestnanec);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<ZamestnanecDto>>> GetAll()
+        {
+            return await GetAllEntities<Zamestnanec, ZamestnanecDto>(
+                _context.Zamestnanci.Include(d => d.Oddelenia)
+            );
+        }
+
         [HttpDelete]
         public async Task<ActionResult<Zamestnanec>> DeleteZamestnanec([FromQuery] string rc)
         {
@@ -167,5 +177,8 @@ public class ZamestnanecDto
     public string? Titul { get; set; }
     public string? TelefonneCislo { get; set; }
     public int? OddelenieId { get; set; }
+
+    [JsonPropertyOrder(100)]
+    public ICollection<Oddelenie>? Oddelenia { get; set; }
 
 }

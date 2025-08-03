@@ -2,6 +2,7 @@
 using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public abstract class BaseApiController : ControllerBase
 {
@@ -12,5 +13,15 @@ public abstract class BaseApiController : ControllerBase
     {
         _context = context;
         _mapper = MapperConfig.InitializeAutomapper();
+    }
+
+    protected async Task<ActionResult<List<TDto>>> GetAllEntities<TEntity, TDto>(
+    IQueryable<TEntity> query
+)
+    where TEntity : class
+    {
+        var entities = await query.ToListAsync();
+        var mapped = _mapper.Map<List<TDto>>(entities);
+        return Ok(mapped);
     }
 }
