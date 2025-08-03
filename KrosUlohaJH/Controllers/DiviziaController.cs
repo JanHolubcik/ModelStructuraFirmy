@@ -8,13 +8,11 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DiviziaController : ControllerBase
+    public class DiviziaController :  BaseApiController
     {
-        private readonly StrukturaFirmyContext _context;
-
-        public DiviziaController(StrukturaFirmyContext context)
+   
+        public DiviziaController(StrukturaFirmyContext context) : base(context)
         {
-            _context = context;
         }
 
         [HttpPost]

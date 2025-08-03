@@ -11,7 +11,7 @@ namespace KrosUlohaJH.Models
 
         [ForeignKey(nameof(Veduci))]
         public string? VeduciRC { get; set; }
-        public Zamestnanec? Veduci { get; set; } //null! potlačí warning, že je null
+        public Zamestnanec? Veduci { get; set; } 
 
         public ICollection<Projekt>? Projekty { get; set; }
     }

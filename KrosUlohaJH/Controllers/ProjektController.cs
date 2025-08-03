@@ -10,13 +10,10 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjektController : ControllerBase
+    public class ProjektController : BaseApiController
     {
-        private readonly StrukturaFirmyContext _context;
-
-        public ProjektController(StrukturaFirmyContext context)
+        public ProjektController(StrukturaFirmyContext context) : base(context)
         {
-            _context = context;
         }
 
         [HttpPost]
@@ -88,7 +85,7 @@ namespace KrosUlohaJH.Controllers
                 {
                     Kod = d.Kod,
                     Nazov = d.Nazov,
-                    Projekty = d.Oddelenia.Select(p => new OddeleniaDto
+                    Oddelenia = d.Oddelenia.Select(p => new OddeleniaDto
                     {
                         Kod = p.Kod,
                         Nazov = p.Nazov

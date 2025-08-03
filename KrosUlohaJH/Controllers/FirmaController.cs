@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Helpers;
+﻿using AutoMapper;
+using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,22 +11,16 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FirmaController : ControllerBase
+    public class FirmaController : BaseApiController
     {
-        private readonly StrukturaFirmyContext _context;
-
-        public FirmaController(StrukturaFirmyContext context)
+        public FirmaController(StrukturaFirmyContext context) : base(context)
         {
-            _context = context;
         }
 
         [HttpPost]
         public async Task<ActionResult<Firma>> PostOrUpdateFirma(FirmaDto FirmaDTO)
-        {
-
-            var mapper = MapperConfig.InitializeAutomapper();
-            var Firma = mapper.Map<Firma>(FirmaDTO);
-
+        { 
+            var Firma = _mapper.Map<Firma>(FirmaDTO);
             var (success, result) = await CreateOrUpdate(Firma);
             return result;
         }
@@ -75,8 +70,6 @@ namespace KrosUlohaJH.Controllers
             {
                 return (isValid, new BadRequestObjectResult(modelState));
             }
-
-
 
             _context.Firmy.Add(Firma);
             await _context.SaveChangesAsync();
@@ -130,10 +123,8 @@ namespace KrosUlohaJH.Controllers
 
 public class FirmaDto : BaseModel
 {
-
     public List<DiviziaDto>? Divizie { get; set; }
-
-    public string? RiaditelRc { get; set; }  // FK na Zamestnanec.RodneCislo
+    public string? RiaditelRc { get; set; }  
 
 
 }

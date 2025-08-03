@@ -9,13 +9,10 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OddelenieController : ControllerBase
+    public class OddelenieController : BaseApiController
     {
-        private readonly StrukturaFirmyContext _context;
-
-        public OddelenieController(StrukturaFirmyContext context)
+        public OddelenieController(StrukturaFirmyContext context) : base(context)
         {
-            _context = context;
         }
 
         [HttpPost]

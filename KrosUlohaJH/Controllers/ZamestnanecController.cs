@@ -10,14 +10,12 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ZamestnanecController : ControllerBase
+    public class ZamestnanecController : BaseApiController
     {
-        private readonly StrukturaFirmyContext _context;
-
-        public ZamestnanecController(StrukturaFirmyContext context)
+        public ZamestnanecController(StrukturaFirmyContext context) : base(context)
         {
-            _context = context;
         }
+
 
         // post, posielam zamestnanca aby sa vytvoril na DB alebo zeditoval
         [HttpPost]
