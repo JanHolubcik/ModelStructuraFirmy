@@ -23,63 +23,33 @@ namespace KrosUlohaJH.Controllers
 
             var mapper = MapperConfig.InitializeAutomapper();
             var Divizia = mapper.Map<Divizia>(DiviziaDto);
-            var (success, result) = await CreateOrUpdate(Divizia);
+            var (success, result) = await CreateOrUpdateDiviziaInternal(Divizia);
             return result;
         }
-
-        [HttpPost("bulk")]
-        public async Task<IActionResult> PostBulkDivizia([FromBody] List<DiviziaDto> Divizia)
+        private async Task<(bool success, ActionResult response)> CreateOrUpdateDiviziaInternal(Divizia divizia)
         {
-            return await BulkHelper.PostBulk<DiviziaDto, Divizia>(Divizia, CreateOrUpdate);
-        }
+            var (success, response) = await CreateOrUpdate(
+                entity: divizia,
+                keySelector: p => p.Kod,
+                keyValue: divizia.Kod,
+                excludedProperties: new[] { "Kod" },
+                customValidation: async (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.VeduciRC))
+                    {
+                        var exists = await _context.Zamestnanci
+                            .AnyAsync(z => z.RodneCislo == p.VeduciRC);
+                        if (!exists)
+                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
+                    }
+                    return (true, null);
+                },
+                getActionName: nameof(GetDivizia),
+                controllerName: "Projekt",
+                routeValues: new { kod = divizia.Kod }
+            );
 
-        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Divizia Divizia)
-        {
-
-
-            if (!string.IsNullOrWhiteSpace(Divizia.VeduciRC))
-            {
- 
-                var exists = await _context.Zamestnanci
-                    .AnyAsync(z => z.RodneCislo == Divizia.VeduciRC);
-
-                if (!exists)
-                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
-            }
-
-            var existujuci = await _context.Divizie
-                .FirstOrDefaultAsync(z => z.Kod == Divizia.Kod);
-
-
-            if (existujuci != null)
-            {
-
-                ReplaceValuesOfObject.UpdateNonNullProperties<Divizia>(existujuci, Divizia, new[] { "Id", "Kod" });
-
-                await _context.SaveChangesAsync();
-                return (true, new OkObjectResult(existujuci)); ;
-            }
-
-
-            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Divizia, ModelState);
-
-            if (!isValid)
-            {
-                return (isValid, new BadRequestObjectResult(modelState));
-            }
-
-            // Skontroluj email
-            if (await _context.Divizie.AnyAsync(u => u.Kod == Divizia.Kod))
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Divizia už existuje" }));
-            }
-
-
-
-            _context.Divizie.Add(Divizia);
-            await _context.SaveChangesAsync();
-
-            return (true, new CreatedAtActionResult(nameof(GetDivizia), "Divizia", new { kod = Divizia.Kod }, Divizia));
+            return (success, response);
         }
 
         [HttpGet("{kod}")]
@@ -137,8 +107,6 @@ namespace KrosUlohaJH.Controllers
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria
 public class DiviziaDto : BaseModel
 {
-
-   
 
     public int? FirmaId { get; set; }
 

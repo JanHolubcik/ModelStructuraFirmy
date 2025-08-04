@@ -22,61 +22,40 @@ namespace KrosUlohaJH.Controllers
         public async Task<ActionResult<Firma>> PostOrUpdateFirma(FirmaDto FirmaDTO)
         { 
             var Firma = _mapper.Map<Firma>(FirmaDTO);
-            var (success, result) = await CreateOrUpdate(Firma);
+            var (success, result) = await CreateOrUpdateFirmaInternal(Firma);
             return result;
         }
 
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkFirma([FromBody] List<FirmaDto> Firma)
         {
-            return await BulkHelper.PostBulk<FirmaDto, Firma>(Firma, CreateOrUpdate);
+            return await BulkHelper.PostBulk<FirmaDto, Firma>(Firma, CreateOrUpdateFirmaInternal);
         }
 
-        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Firma Firma)
+        private async Task<(bool success, ActionResult response)> CreateOrUpdateFirmaInternal(Firma firma)
         {
+            var (success, response) = await CreateOrUpdate(
+                entity: firma,
+                keySelector: p => p.Kod,
+                keyValue: firma.Kod,
+                excludedProperties: new[] { "Kod" },
+                customValidation: async (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.RiaditelRc))
+                    {
+                        var exists = await _context.Zamestnanci
+                            .AnyAsync(z => z.RodneCislo == p.RiaditelRc);
+                        if (!exists)
+                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
+                    }
+                    return (true, null);
+                },
+                getActionName: nameof(GetFirma),
+                controllerName: "Projekt",
+                routeValues: new { kod = firma.Kod }
+            );
 
-            var existujuci = await _context.Firmy
-                .FirstOrDefaultAsync(z => z.Kod == Firma.Kod);
-
-
-            if (!string.IsNullOrWhiteSpace(Firma.RiaditelRc))
-            {
-
-                var exists = await _context.Zamestnanci
-                    .AnyAsync(z => z.RodneCislo == Firma.RiaditelRc);
-
-                if (!exists)
-                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
-            }
-
-            var veduciExistuje = await _context.Firmy
-            .AnyAsync(d => d.RiaditelRc == Firma.RiaditelRc && d.Kod != Firma.Kod);
-
-            if (veduciExistuje)
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Riaditeľ nemôže mať viacero firiem." }));
-            }
-
-            if (existujuci != null)
-            {
-                ReplaceValuesOfObject.UpdateNonNullProperties<Firma>(existujuci, Firma, new[] { "Id", "Kod" });
-                await _context.SaveChangesAsync();
-                return (true, new OkObjectResult(existujuci)); ;
-            }
-
-
-            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Firma, ModelState);
-
-            if (!isValid)
-            {
-                return (isValid, new BadRequestObjectResult(modelState));
-            }
-
-
-            _context.Firmy.Add(Firma);
-            await _context.SaveChangesAsync();
-
-            return (true, new CreatedAtActionResult(nameof(GetFirma), "Firma", new { kod = Firma.Kod }, Firma));
+            return (success, response);
         }
 
 

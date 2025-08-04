@@ -24,7 +24,7 @@ namespace KrosUlohaJH.Controllers
         {
             var mapper = MapperConfig.InitializeAutomapper();
             var zamestnanec = mapper.Map<Zamestnanec>(zamestnanecDTO);
-            var (success, result) = await CreateOrUpdate(zamestnanec);
+            var (success, result) = await CreateOrUpdateZamestnanecInternal(zamestnanec);
             return result;
         }
 
@@ -40,7 +40,7 @@ namespace KrosUlohaJH.Controllers
             {
                 var zamestnanec = mapper.Map<Zamestnanec>(zamestnanecDTO);
 
-                var (ok, result) = await CreateOrUpdate(zamestnanec);
+                var (ok, result) = await CreateOrUpdateZamestnanecInternal(zamestnanec);
 
                 if (ok && result is ObjectResult r1 && r1.Value is Zamestnanec zam)
                     success.Add(zam);
@@ -56,69 +56,68 @@ namespace KrosUlohaJH.Controllers
             });
         }
 
-        //Funcionalitu som rozdelil aby som mohol vytvoriť bulk na začiatku kvôli testom.
-        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Zamestnanec zamestnanec)
+        private async Task<(bool success, ActionResult response)> CreateOrUpdateZamestnanecInternal(Zamestnanec zamestnanec)
         {
-            if (string.IsNullOrWhiteSpace(zamestnanec.RodneCislo))
-            {
-                return (false, new BadRequestObjectResult(new { sprava = "Rodné číslo musí byť vyplnené." }));
-            }
-
-            var context = new ValidationContext(zamestnanec) { MemberName = nameof(Zamestnanec.RodneCislo) };
-            var results = new List<ValidationResult>();
-            bool isValidRC = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
-
-            if (!isValidRC)
-            {
-                var chyba = results.First().ErrorMessage;
-                return (false, new BadRequestObjectResult(new { sprava = chyba }));
-            }
-
-            if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
-            {
-
-                if (!Regex.IsMatch(zamestnanec.TelefonneCislo, @"^\+[1-9]\d{1,14}$"))
+            var (success, response) = await CreateOrUpdate(
+                entity: zamestnanec,
+                keySelector: p => p.RodneCislo,
+                keyValue: zamestnanec.RodneCislo,
+                excludedProperties: new[] { "RodneCislo" },
+                customValidation: async (p) =>
                 {
-                    return (false, new BadRequestObjectResult(new { sprava = "Telefónne číslo je v zlom formáte (medzinárodný formát)" }));
-                }
+                    //toto treba dat do funkcie alebo vymysliet ako validovat ak uz existuje nieco v tabulke
+                    //lepsie, mozno do helper pridat dalsi funkciu it exists?, a naraz hodit vsetky ktore sa maju validovat
+                   // takisto aj is valid, spravny format aky ma byt
+                    if (string.IsNullOrWhiteSpace(zamestnanec.RodneCislo))
+                    {
+                        return (false, "Rodné číslo musí byť vyplnené." );
+                    }
+                    if (!string.IsNullOrWhiteSpace(p.RodneCislo))
+                    {
+                        var exists = await _context.Zamestnanci
+                            .AnyAsync(z => z.RodneCislo == p.RodneCislo);
+                        if (!exists)
+                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
+                    }
+                    var context = new ValidationContext(zamestnanec) { MemberName = nameof(Zamestnanec.RodneCislo) };
+                    var results = new List<ValidationResult>();
+                    bool isValidRC = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
+                    bool isValidTel = Validator.TryValidateProperty(zamestnanec.TelefonneCislo, context, results);
+                    if (!isValidRC)
+                    {
+                        var chyba = results.First().ErrorMessage;
+                        return (false,  chyba);
+                    }
+                    if (isValidTel)
+                    {
+                        return (false, "Telefónne číslo je v zlom formáte (medzinárodný formát)");
+                    }
+                    if (!string.IsNullOrWhiteSpace(zamestnanec.TelefonneCislo))
+                    {
 
-                var existujeTelefon = await _context.Zamestnanci
-                     .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
-                if (existujeTelefon)
-                {
-                    return (false, new ConflictObjectResult(new { sprava = "Telefónne čislo je už zaregistrované." }));
-                }
-            }
+                        var existujeTelefon = await _context.Zamestnanci
+                             .AnyAsync(z => z.TelefonneCislo == zamestnanec.TelefonneCislo && z.RodneCislo != zamestnanec.RodneCislo);
+                        if (existujeTelefon)
+                        {
+                            return (false, "Telefónne čislo je už zaregistrované." );
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(zamestnanec.Email) &&
+                         await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email && u.RodneCislo != zamestnanec.RodneCislo))
+                    {
+                        return (false,"Tento email už je zaregistrovaný." );
+                    }
+                    return (true, null);
+                },
+                getActionName: nameof(GetZamestnanec),
+                controllerName: "Projekt",
+                routeValues: new { RodneCislo = zamestnanec.RodneCislo }
+            );
 
-            var existujuci = await _context.Zamestnanci
-                .FirstOrDefaultAsync(z => z.RodneCislo == zamestnanec.RodneCislo);
-
-            if (existujuci != null)
-            {
-                if (!string.IsNullOrWhiteSpace(zamestnanec.Email) &&
-                    await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email && u.RodneCislo != zamestnanec.RodneCislo))
-                {
-                    return (false, new ConflictObjectResult(new { sprava = "Tento email už je zaregistrovaný." }));
-                }
-                ReplaceValuesOfObject.UpdateNonNullProperties<Zamestnanec>(existujuci, zamestnanec, new[] { "RodneCislo" });
-                await _context.SaveChangesAsync();
-                return (true, new OkObjectResult(existujuci));
-            }
-
-            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(zamestnanec, ModelState);
-
-            if (!isValid)
-            {
-                return (isValid, new BadRequestObjectResult(modelState));
-            }
-
-            if (await _context.Zamestnanci.AnyAsync(u => u.Email == zamestnanec.Email))
-                return (false, new ConflictObjectResult(new { sprava = "Tento email už je zaregistrovaný." }));
-
-            _context.Zamestnanci.Add(zamestnanec);
-            await _context.SaveChangesAsync();
-            return (true, new CreatedAtActionResult(nameof(GetZamestnanec), "Zamestnanec", new { rc = zamestnanec.RodneCislo }, zamestnanec));
+            return (success, response);
         }
+
+     
 
         //api/Zamestnanec/{rc}
         [HttpGet]

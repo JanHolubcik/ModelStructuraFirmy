@@ -21,60 +21,40 @@ namespace KrosUlohaJH.Controllers
 
             var mapper = MapperConfig.InitializeAutomapper();
             var Oddelenie = mapper.Map<Oddelenie>(OddelenieDto);
-            var (success, result) = await CreateOrUpdate(Oddelenie);
+            var (success, result) = await CreateOrUpdateOddelenieInternal(Oddelenie);
             return result;
         }
 
         [HttpPost("bulk")]
         public async Task<IActionResult> PostBulkOddelenia([FromBody] List<OddeleniaDto> Oddelenia)
         {
-            return await BulkHelper.PostBulk<OddeleniaDto, Oddelenie>(Oddelenia, CreateOrUpdate);
+            return await BulkHelper.PostBulk<OddeleniaDto, Oddelenie>(Oddelenia, CreateOrUpdateOddelenieInternal);
         }
 
-        private async Task<(bool success, ActionResult response)> CreateOrUpdate(Oddelenie Oddelenie)
+        private async Task<(bool success, ActionResult response)> CreateOrUpdateOddelenieInternal(Oddelenie oddelenie)
         {
+            var (success, response) = await CreateOrUpdate(
+                entity: oddelenie,
+                keySelector: p => p.Kod,
+                keyValue: oddelenie.Kod,
+                excludedProperties: new[] { "Kod" },
+                customValidation: async (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.VeduciOddeleniaRc))
+                    {
+                        var exists = await _context.Zamestnanci
+                            .AnyAsync(z => z.RodneCislo == p.VeduciOddeleniaRc);
+                        if (!exists)
+                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
+                    }
+                    return (true, null);
+                },
+                getActionName: nameof(GetOddelenie),
+                controllerName: "Projekt",
+                routeValues: new { kod = oddelenie.Kod }
+            );
 
-
-            if (!string.IsNullOrWhiteSpace(Oddelenie.VeduciOddeleniaRc))
-            {
-    
-                var exists = await _context.Zamestnanci
-                    .AnyAsync(z => z.RodneCislo == Oddelenie.VeduciOddeleniaRc);
-
-                if (!exists)
-                    return (false, BadRequest("Rodné číslo neexistuje v tabuľke zamestnanci."));
-            }
-
-            var existujuci = await _context.Oddelenia
-                .FirstOrDefaultAsync(z => z.Kod == Oddelenie.Kod);
-
-            if (existujuci != null) 
-            {
-
-                ReplaceValuesOfObject.UpdateNonNullProperties<Oddelenie>(existujuci, Oddelenie, new[] { "Id", "Kod" });
-
-                await _context.SaveChangesAsync();
-                return (true, new OkObjectResult(existujuci)); ;
-            }
-
-
-            var (isValid, modelState) = ValidationHelper.ValidateAndHandleModelState(Oddelenie, ModelState);
-
-            if (!isValid)
-            {
-                return (isValid, new BadRequestObjectResult(modelState));
-            }
-
-            // Skontroluj email
-            if (await _context.Oddelenia.AnyAsync(u => u.Kod == Oddelenie.Kod))
-            {
-                return (false, new ConflictObjectResult(new { sprava = "Toto oddelenie už existuje" }));
-            }
-
-            _context.Oddelenia.Add(Oddelenie);
-            await _context.SaveChangesAsync();
-
-            return (true, new CreatedAtActionResult(nameof(GetOddelenie), "Oddelenie", new { kod = Oddelenie.Kod }, Oddelenie));
+            return (success, response);
         }
 
         [HttpGet("{kod}")]
