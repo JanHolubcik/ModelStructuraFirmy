@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -58,29 +59,20 @@ namespace KrosUlohaJH.Controllers
             return (success, response);
         }
 
-
+        //este treba prerobit get nech tam je map namiesto tohto 
         [HttpGet("{kod}")]
         public async Task<ActionResult<FirmaDto>> GetFirma(string kod)
         {
-            var divizia = await _context.Firmy
+            var firma = await _context.Firmy
                 .Where(d => d.Kod == kod)
-                .Include(d => d.Divizie)
-                .Select(d => new FirmaDto
-                {
-                    Kod = d.Kod,
-                    Nazov = d.Nazov,
-                    Divizie = d.Divizie.Select(p => new DiviziaDto
-                    {
-                        Kod = p.Kod,
-                        Nazov = p.Nazov
-                    }).ToList()
-                })
+                .Include(d => d.Divizie) 
+                .ProjectTo<FirmaDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            if (divizia == null)
+            if (firma == null)
                 return NotFound(new { message = "Firma nebola nájdená." });
 
-            return Ok(divizia);
+            return Ok(firma);
         }
 
         [HttpGet]
@@ -110,6 +102,7 @@ namespace KrosUlohaJH.Controllers
     }
 }
 
+//DTO triedy by asi trebalo dat do custom triedy
 public class FirmaDto : BaseModel
 {
  
