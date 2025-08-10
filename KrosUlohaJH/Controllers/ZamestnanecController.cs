@@ -32,6 +32,7 @@ namespace KrosUlohaJH.Controllers
         public async Task<IActionResult> PostBulkZamestnanci([FromBody] List<ZamestnanecDto> zamestnanci)
         {
             // nepoužívam bulk z helpera, kedže bulk používa rodneCislo namiesto kod
+            //
             var errors = new List<object>();
             var success = new List<Zamestnanec>();
             var mapper = MapperConfig.InitializeAutomapper();

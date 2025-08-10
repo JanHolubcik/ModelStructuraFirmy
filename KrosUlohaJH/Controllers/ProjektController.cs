@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Helpers;
+﻿using AutoMapper.QueryableExtensions;
+using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,22 +61,13 @@ namespace KrosUlohaJH.Controllers
         public async Task<ActionResult<ProjektDto>> GetProjekt(string kod)
         {
             var projekt = await _context.Projekty
-                .Where(d => d.Kod == kod)
-                .Include(d => d.Oddelenia)
-                .Select(d => new ProjektDto
-                {
-                    Kod = d.Kod,
-                    Nazov = d.Nazov,
-                    Oddelenia = d.Oddelenia.Select(p => new OddeleniaDto
-                    {
-                        Kod = p.Kod,
-                        Nazov = p.Nazov
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync();
+           .Where(d => d.Kod == kod)
+           .Include(d => d.Oddelenia)
+           .ProjectTo<ZamestnanecDto>(_mapper.ConfigurationProvider)
+           .FirstOrDefaultAsync();
 
             if (projekt == null)
-                return NotFound(new { message = "Projekt nebol nájdení." });
+                return NotFound(new { message = "Firma nebola nájdená." });
 
             return Ok(projekt);
         }

@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Helpers;
+﻿using AutoMapper.QueryableExtensions;
+using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,32 +57,25 @@ namespace KrosUlohaJH.Controllers
 
             return (success, response);
         }
+        [HttpGet]
+        public async Task<ActionResult<List<OddeleniaDto>>> GetAll()
+        {
+            return await GetAllEntities<Oddelenie, OddeleniaDto>(
+                _context.Oddelenia.Include(d => d.Zamestnanci)
+            );
+        }
 
         [HttpGet("{kod}")]
         public async Task<ActionResult<OddeleniaDto>> GetOddelenie(string kod)
         {
             var oddelenie = await _context.Oddelenia
-                .Where(d => d.Kod == kod)
-                .Include(d => d.Zamestnanci)
-                .Select(d => new OddeleniaDto
-                {
-                    Kod = d.Kod,
-                    Nazov = d.Nazov,
-                    ProjektId = d.ProjektId,
-                    VeduciOddeleniaRc = d.VeduciOddeleniaRc,
-                    Zamestnanci = d.Zamestnanci.Select(p => new ZamestnanecDto
-                    {
-                        Meno = p.Meno,
-                        Priezvisko = p.Priezvisko,
-                        RodneCislo = p.RodneCislo,
-                        Titul = p.Titul,
-
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync();
+             .Where(d => d.Kod == kod)
+             .Include(d => d.Zamestnanci)
+             .ProjectTo<ZamestnanecDto>(_mapper.ConfigurationProvider)
+             .FirstOrDefaultAsync();
 
             if (oddelenie == null)
-                return NotFound(new { message = "Divízia nebola nájdená." });
+                return NotFound(new { message = "Firma nebola nájdená." });
 
             return Ok(oddelenie);
         }

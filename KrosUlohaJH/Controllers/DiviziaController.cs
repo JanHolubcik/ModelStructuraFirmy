@@ -1,4 +1,5 @@
-﻿using KrosUlohaJH.Helpers;
+﻿using AutoMapper.QueryableExtensions;
+using KrosUlohaJH.Helpers;
 using KrosUlohaJH.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,26 +56,18 @@ namespace KrosUlohaJH.Controllers
         [HttpGet("{kod}")]
         public async Task<ActionResult<DiviziaDto>> GetDivizia(string kod)
         {
-            var divizia = await _context.Divizie
+             var divizia = await _context.Divizie
                 .Where(d => d.Kod == kod)
                 .Include(d => d.Projekty)
-                .Select(d => new DiviziaDto
-                {
-                    
-                    Kod = d.Kod,
-                    Nazov = d.Nazov,
-                    Projekty = d.Projekty.Select(p => new ProjektDto
-                    {
-                        Kod = p.Kod,
-                        Nazov = p.Nazov
-                    }).ToList()
-                })
+                .ProjectTo<FirmaDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
             if (divizia == null)
-                return NotFound(new { message = "Divízia nebola nájdená." });
+                return NotFound(new { message = "Firma nebola nájdená." });
 
             return Ok(divizia);
+
+     
         }
 
         [HttpGet]
