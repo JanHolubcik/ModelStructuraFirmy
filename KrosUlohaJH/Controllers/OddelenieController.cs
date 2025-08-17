@@ -77,18 +77,12 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Oddelenie>> DeleteOddelenie(string Kod)
         {
-            var oddelenie = await _context.Oddelenia
-                .FirstOrDefaultAsync(z => z.Kod == Kod);
-
-            if (oddelenie == null)
-            {
-                return NotFound();
-            }
-
-            _context.Oddelenia.Remove(oddelenie);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Oddelenie bolo úspešne odstránené." });
+            return await DeleteEntityByProperty<Oddelenie, string>(
+                 _context.Oddelenia,
+                 d => d.Kod,
+                 Kod,
+                 "Oddelenie"
+             );
         }
     }
 }

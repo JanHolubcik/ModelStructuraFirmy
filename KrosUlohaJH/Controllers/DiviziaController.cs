@@ -74,20 +74,13 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Divizia>> DeleteDivizia(string Kod)
         {
-            var divizia = await _context.Divizie
-                .FirstOrDefaultAsync(z => z.Kod == Kod);
-
-            if (divizia == null)
-            {
-                return NotFound();
-            }
-
-            _context.Divizie.Remove(divizia);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Divízia bola úspešne odstránená." });
+            return await DeleteEntityByProperty<Divizia, string>(
+                 _context.Divizie,
+                 d => d.Kod,
+                 Kod,
+                 "Divízia"
+             );
         }
-    }
 }
 
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria

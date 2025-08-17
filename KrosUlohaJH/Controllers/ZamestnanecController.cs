@@ -143,18 +143,12 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete]
         public async Task<ActionResult<Zamestnanec>> DeleteZamestnanec([FromQuery] string rc)
         {
-            var zamestnanec = await _context.Zamestnanci
-                .FirstOrDefaultAsync(z => z.RodneCislo == rc);
-
-            if (zamestnanec == null)
-            {
-                return NotFound();
-            }
-
-            _context.Zamestnanci.Remove(zamestnanec);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Zamestnanec bol úspešne odstránený." });
+            return await DeleteEntityByProperty<Zamestnanec, string>(
+                 _context.Zamestnanci,
+                 d => d.RodneCislo,
+                 rc,
+                 "Zamestnanec"
+             );
         }
 
     }

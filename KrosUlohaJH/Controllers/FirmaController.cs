@@ -80,18 +80,12 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Firma>> DeleteFirma(string Kod)
         {
-            var firma = await _context.Firmy
-                .FirstOrDefaultAsync(z => z.Kod == Kod);
-
-            if (firma == null)
-            {
-                return NotFound();
-            }
-
-            _context.Firmy.Remove(firma);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Firma bola úspešne odstránená." });
+            return await DeleteEntityByProperty<Firma, string>(
+                 _context.Firmy,
+                 d => d.Kod,
+                 Kod,
+                 "Firma"
+             );
         }
     }
 }

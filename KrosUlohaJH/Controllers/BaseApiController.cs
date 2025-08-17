@@ -63,6 +63,54 @@ where TEntity : class
         return Ok(mapped);
     }
 
+    protected async Task<ActionResult> DeleteEntity<TEntity>(
+    DbSet<TEntity> dbSet,
+    Expression<Func<TEntity, bool>> predicate,
+    string entityName = null
+    )
+    where TEntity : class
+        {
+        var entity = await dbSet.FirstOrDefaultAsync(predicate);
+
+        if (entity == null)
+        {
+            return NotFound(new { message = $"{entityName ?? typeof(TEntity).Name} not found." });
+        }
+
+        dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = $"{entityName ?? typeof(TEntity).Name} was successfully deleted." });
+    }
+
+    protected async Task<ActionResult> DeleteEntityByProperty<TEntity, TProperty>(
+    DbSet<TEntity> dbSet,
+    Expression<Func<TEntity, TProperty>> propertySelector,
+    TProperty value,
+    string entityName = null
+    )
+    where TEntity : class
+        {
+        // Create the predicate: entity => entity.Property == value
+        var parameter = Expression.Parameter(typeof(TEntity), "entity");
+        var property = Expression.Invoke(propertySelector, parameter);
+        var constant = Expression.Constant(value, typeof(TProperty));
+        var equality = Expression.Equal(property, constant);
+        var predicate = Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
+
+        var entity = await dbSet.FirstOrDefaultAsync(predicate);
+
+        if (entity == null)
+        {
+            return NotFound(new { message = $"{entityName ?? typeof(TEntity).Name} not found." });
+        }
+
+        dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = $"{entityName ?? typeof(TEntity).Name} was successfully deleted." });
+    }
+
     protected async Task<(bool success, ActionResult response)> CreateOrUpdate<TEntity, TKey>(
         TEntity entity,
         Expression<Func<TEntity, TKey>> keySelector,
