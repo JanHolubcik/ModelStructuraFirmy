@@ -77,11 +77,9 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Projekt>> DeleteProjekt(string Kod)
         {
-            return await DeleteEntityByProperty<Projekt, string>(
+            return await DeleteEntity<Projekt>(
               _context.Projekty,
-              d => d.Kod,
-              Kod,
-              "Projekt"
+              d => d.Kod == Kod
           );
         }
     }

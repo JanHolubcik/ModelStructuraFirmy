@@ -80,12 +80,10 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Firma>> DeleteFirma(string Kod)
         {
-            return await DeleteEntityByProperty<Firma, string>(
-                 _context.Firmy,
-                 d => d.Kod,
-                 Kod,
-                 "Firma"
-             );
+            return await DeleteEntity<Firma>(
+            _context.Firmy,
+            d => d.Kod == Kod
+        );
         }
     }
 }

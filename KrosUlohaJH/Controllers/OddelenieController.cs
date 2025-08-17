@@ -64,7 +64,7 @@ namespace KrosUlohaJH.Controllers
                 _context.Oddelenia.Include(d => d.Zamestnanci)
             );
         }
-        //tieto 2 by mohli byt aj jedna funkcia ?
+
         [HttpGet("{kod}")]
         public async Task<ActionResult<OddeleniaDto>> GetOddelenie(string kod)
         {
@@ -77,11 +77,9 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Oddelenie>> DeleteOddelenie(string Kod)
         {
-            return await DeleteEntityByProperty<Oddelenie, string>(
+            return await DeleteEntity<Oddelenie>(
                  _context.Oddelenia,
-                 d => d.Kod,
-                 Kod,
-                 "Oddelenie"
+                 d => d.Kod == Kod
              );
         }
     }

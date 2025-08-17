@@ -125,10 +125,9 @@ namespace KrosUlohaJH.Controllers
         [HttpGet]
         public async Task<ActionResult<ZamestnanecDto>> GetZamestnanec([FromQuery] string rc)
         {
-            return await GetSingleEntityByProperty<Zamestnanec, ZamestnanecDto, string>(
+            return await GetSingleEntity<Zamestnanec, ZamestnanecDto>(
                 _context.Zamestnanci,
-                z => z.RodneCislo,  
-                rc                 
+                z => z.RodneCislo == rc     
             );
         }
 
@@ -143,11 +142,9 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete]
         public async Task<ActionResult<Zamestnanec>> DeleteZamestnanec([FromQuery] string rc)
         {
-            return await DeleteEntityByProperty<Zamestnanec, string>(
+            return await DeleteEntity<Zamestnanec>(
                  _context.Zamestnanci,
-                 d => d.RodneCislo,
-                 rc,
-                 "Zamestnanec"
+                 d => d.RodneCislo== rc
              );
         }
 

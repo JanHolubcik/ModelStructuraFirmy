@@ -10,9 +10,9 @@ namespace KrosUlohaJH.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DiviziaController :  BaseApiController
+    public class DiviziaController : BaseApiController
     {
-   
+
         public DiviziaController(StrukturaFirmyContext context) : base(context)
         {
         }
@@ -74,24 +74,23 @@ namespace KrosUlohaJH.Controllers
         [HttpDelete("{kod}")]
         public async Task<ActionResult<Divizia>> DeleteDivizia(string Kod)
         {
-            return await DeleteEntityByProperty<Divizia, string>(
+            return await DeleteEntity<Divizia>(
                  _context.Divizie,
-                 d => d.Kod,
-                 Kod,
-                 "Divízia"
+                 d => d.Kod == Kod
              );
         }
+    }
 }
-
 //slúži na lepšie vrátenie uzla, aj aké iné uzly mu patria
 public class DiviziaDto : BaseModel
-{
+    {
 
-    public int? FirmaId { get; set; }
+        public int? FirmaId { get; set; }
 
-    public string? VeduciRC { get; set; }
-   
-    [JsonPropertyOrder(100)]
-    public List<ProjektDto>? Projekty { get; set; }
+        public string? VeduciRC { get; set; }
 
-}
+        [JsonPropertyOrder(100)]
+        public List<ProjektDto>? Projekty { get; set; }
+
+    }
+
