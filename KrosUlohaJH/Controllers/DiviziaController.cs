@@ -46,7 +46,7 @@ namespace KrosUlohaJH.Controllers
                     return (true, null);
                 },
                 getActionName: nameof(GetDivizia),
-                controllerName: "Projekt",
+                controllerName: "Divizia",
                 routeValues: new { kod = divizia.Kod }
             );
 
@@ -56,19 +56,12 @@ namespace KrosUlohaJH.Controllers
         [HttpGet("{kod}")]
         public async Task<ActionResult<DiviziaDto>> GetDivizia(string kod)
         {
-             var divizia = await _context.Divizie
-                .Where(d => d.Kod == kod)
-                .Include(d => d.Projekty)
-                .ProjectTo<FirmaDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-
-            if (divizia == null)
-                return NotFound(new { message = "Firma nebola nájdená." });
-
-            return Ok(divizia);
-
-     
+            return await GetSingleEntity<Divizia, DiviziaDto>(
+                _context.Divizie.Include(d => d.Projekty),
+                d => d.Kod == kod
+            );
         }
+
 
         [HttpGet]
         public async Task<ActionResult<List<DiviziaDto>>> GetAll()

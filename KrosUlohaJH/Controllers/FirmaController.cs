@@ -52,27 +52,21 @@ namespace KrosUlohaJH.Controllers
                     return (true, null);
                 },
                 getActionName: nameof(GetFirma),
-                controllerName: "Projekt",
+                controllerName: "Firma",
                 routeValues: new { kod = firma.Kod }
             );
 
             return (success, response);
         }
 
-        //este treba prerobit get nech tam je map namiesto tohto 
+
         [HttpGet("{kod}")]
         public async Task<ActionResult<FirmaDto>> GetFirma(string kod)
         {
-            var firma = await _context.Firmy
-                .Where(d => d.Kod == kod)
-                .Include(d => d.Divizie) 
-                .ProjectTo<FirmaDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-
-            if (firma == null)
-                return NotFound(new { message = "Firma nebola nájdená." });
-
-            return Ok(firma);
+          return await GetSingleEntity<Firma, FirmaDto>(
+              _context.Firmy.Include(d => d.Divizie),
+              d => d.Kod == kod
+          );
         }
 
         [HttpGet]

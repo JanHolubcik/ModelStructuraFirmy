@@ -32,7 +32,7 @@ namespace KrosUlohaJH.Controllers
         public async Task<IActionResult> PostBulkZamestnanci([FromBody] List<ZamestnanecDto> zamestnanci)
         {
             // nepoužívam bulk z helpera, kedže bulk používa rodneCislo namiesto kod
-            //
+            // mohol by som nastavit aj aky atribut by sa mal porovnavat, zatial to necham na ten kod a uvidim do buducna
             var errors = new List<object>();
             var success = new List<Zamestnanec>();
             var mapper = MapperConfig.InitializeAutomapper();
@@ -68,7 +68,8 @@ namespace KrosUlohaJH.Controllers
                 {
                     //toto treba dat do funkcie alebo vymysliet ako validovat ak uz existuje nieco v tabulke
                     //lepsie, mozno do helper pridat dalsi funkciu it exists?, a naraz hodit vsetky ktore sa maju validovat
-                   // takisto aj is valid, spravny format aky ma byt
+                    // takisto aj is valid, spravny format aky ma byt
+                    // zatial to necham tak, uvidim ci vymislim nieco ine
                     if (string.IsNullOrWhiteSpace(zamestnanec.RodneCislo))
                     {
                         return (false, "Rodné číslo musí byť vyplnené." );
@@ -118,21 +119,17 @@ namespace KrosUlohaJH.Controllers
             return (success, response);
         }
 
-     
+
 
         //api/Zamestnanec/{rc}
         [HttpGet]
-        public async Task<IActionResult> GetZamestnanec([FromQuery] string rc)
+        public async Task<ActionResult<ZamestnanecDto>> GetZamestnanec([FromQuery] string rc)
         {
-            var zamestnanec = await _context.Zamestnanci
-                .FirstOrDefaultAsync(z => z.RodneCislo == rc);
-
-            if (zamestnanec == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(zamestnanec);
+            return await GetSingleEntityByProperty<Zamestnanec, ZamestnanecDto, string>(
+                _context.Zamestnanci,
+                z => z.RodneCislo,  
+                rc                 
+            );
         }
 
         [HttpGet]

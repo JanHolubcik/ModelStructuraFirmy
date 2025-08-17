@@ -60,16 +60,10 @@ namespace KrosUlohaJH.Controllers
         [HttpGet("{kod}")]
         public async Task<ActionResult<ProjektDto>> GetProjekt(string kod)
         {
-            var projekt = await _context.Projekty
-           .Where(d => d.Kod == kod)
-           .Include(d => d.Oddelenia)
-           .ProjectTo<ZamestnanecDto>(_mapper.ConfigurationProvider)
-           .FirstOrDefaultAsync();
-
-            if (projekt == null)
-                return NotFound(new { message = "Firma nebola nájdená." });
-
-            return Ok(projekt);
+            return await GetSingleEntity<Projekt, ProjektDto>(
+             _context.Projekty.Include(d => d.Oddelenia),
+             d => d.Kod == kod
+         );
         }
 
         [HttpGet]

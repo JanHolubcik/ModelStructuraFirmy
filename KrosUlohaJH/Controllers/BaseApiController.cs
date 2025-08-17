@@ -15,7 +15,44 @@ public abstract class BaseApiController : ControllerBase
         _context = context;
         _mapper = MapperConfig.InitializeAutomapper();
     }
+    protected async Task<ActionResult<TDto>> GetSingleEntity<TEntity, TDto>(
+    IQueryable<TEntity> query,
+    Expression<Func<TEntity, bool>> predicate
+)
+where TEntity : class
+    {
+        var entity = await query.Where(predicate).FirstOrDefaultAsync();
 
+        if (entity == null)
+            return NotFound(new { message = $"{typeof(TEntity).Name} not found." });
+
+        var mapped = _mapper.Map<TDto>(entity);
+        return Ok(mapped);
+    }
+    protected async Task<ActionResult<TDto>> GetSingleEntityByProperty<TEntity, TDto, TProperty>(
+        IQueryable<TEntity> query,
+        Expression<Func<TEntity, TProperty>> propertySelector,
+        TProperty value
+    )
+    where TEntity : class
+    {
+        // entity => entity.Property == value
+        var parameter = Expression.Parameter(typeof(TEntity), "entity");
+        var property = Expression.Invoke(propertySelector, parameter);
+        var constant = Expression.Constant(value, typeof(TProperty));
+        var equality = Expression.Equal(property, constant);
+        var predicate = Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
+
+        var entity = await query.Where(predicate).FirstOrDefaultAsync();
+
+        if (entity == null)
+            return NotFound(new { message = $"{typeof(TEntity).Name} not found." });
+
+        var mapped = _mapper.Map<TDto>(entity);
+        return Ok(mapped);
+    }
+
+    //ak by bolo vela osob trebalo by spravit aj filtrovanie (fetchnut 1000, potom 1000 atd)
     protected async Task<ActionResult<List<TDto>>> GetAllEntities<TEntity, TDto>(
         IQueryable<TEntity> query
     )

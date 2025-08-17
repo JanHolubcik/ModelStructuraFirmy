@@ -51,7 +51,7 @@ namespace KrosUlohaJH.Controllers
                     return (true, null);
                 },
                 getActionName: nameof(GetOddelenie),
-                controllerName: "Projekt",
+                controllerName: "Oddelenie",
                 routeValues: new { kod = oddelenie.Kod }
             );
 
@@ -64,20 +64,14 @@ namespace KrosUlohaJH.Controllers
                 _context.Oddelenia.Include(d => d.Zamestnanci)
             );
         }
-
+        //tieto 2 by mohli byt aj jedna funkcia ?
         [HttpGet("{kod}")]
         public async Task<ActionResult<OddeleniaDto>> GetOddelenie(string kod)
         {
-            var oddelenie = await _context.Oddelenia
-             .Where(d => d.Kod == kod)
-             .Include(d => d.Zamestnanci)
-             .ProjectTo<ZamestnanecDto>(_mapper.ConfigurationProvider)
-             .FirstOrDefaultAsync();
-
-            if (oddelenie == null)
-                return NotFound(new { message = "Firma nebola nájdená." });
-
-            return Ok(oddelenie);
+            return await GetSingleEntity<Oddelenie, OddeleniaDto>(
+             _context.Oddelenia.Include(d => d.Zamestnanci),
+             d => d.Kod == kod
+         );
         }
 
         [HttpDelete("{kod}")]
