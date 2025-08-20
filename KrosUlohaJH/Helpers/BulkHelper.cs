@@ -3,40 +3,53 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KrosUlohaJH.Helpers
 {
-    public class BulkHelper
-    {
-        public static async Task<IActionResult> PostBulk<T, TEntity>(List<T> model, Func<TEntity, Task<(bool success, ActionResult response)>> CreateOrUpdate)
-     where T : BaseModel
-     where TEntity : BaseModel
+        public class BulkHelper
         {
-            var errors = new List<object>();
-            var success = new List<T>();
-            var mapper = MapperConfig.InitializeAutomapper();
-
-            foreach (var dto in model)
+            public static async Task<IActionResult> PostBulk<T, TEntity>(
+                List<T> model,
+                Func<TEntity, Task<(bool success, ActionResult response)>> CreateOrUpdate,
+                string identifierPropertyName = "Kod")
             {
-                var entity = mapper.Map<TEntity>(dto);
-                var (isSuccess, result) = await CreateOrUpdate(entity);
+                var errors = new List<object>();
+                var success = new List<T>();
+                var mapper = MapperConfig.InitializeAutomapper();
 
-                if (isSuccess && result is OkObjectResult okResult && okResult.Value is TEntity responseEntity)
+                foreach (var dto in model)
                 {
-                    var mappedBack = mapper.Map<T>(responseEntity);
-                    success.Add(mappedBack);
+                    var entity = mapper.Map<TEntity>(dto);
+                    var (isSuccess, result) = await CreateOrUpdate(entity);
+
+                    if (isSuccess && result is OkObjectResult okResult && okResult.Value is TEntity responseEntity)
+                    {
+                        var mappedBack = mapper.Map<T>(responseEntity);
+                        success.Add(mappedBack);
+                    }
+                    else
+                    {
+                        // Get the identifier value using reflection
+                        var identifierValue = GetPropertyValue(dto, identifierPropertyName);
+                        errors.Add(new
+                        {
+                            identifier = identifierValue,
+                            chyba = (result as ObjectResult)?.Value
+                        });
+                    }
                 }
-                else
+
+                return new OkObjectResult(new
                 {
-                    errors.Add(new { kod = dto.Kod, chyba = (result as ObjectResult)?.Value });
-                }
+                    uspesne = success.Count,
+                    neuspesne = errors.Count,
+                    chyby = errors
+                });
             }
 
-            return new OkObjectResult(new
+            private static object GetPropertyValue(object obj, string propertyName)
             {
-                uspesne = success.Count,
-                neuspesne = errors.Count,
-                chyby = errors
-            });
-        
+                var property = obj.GetType().GetProperty(propertyName);
+                return property?.GetValue(obj);
+            }
+        }
+
+
     }
-    }
-    
-}
