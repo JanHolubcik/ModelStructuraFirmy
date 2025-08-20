@@ -27,6 +27,13 @@ namespace KrosUlohaJH.Controllers
             var (success, result) = await CreateOrUpdateDiviziaInternal(Divizia);
             return result;
         }
+
+        [HttpPost("bulk")]
+        public async Task<IActionResult> PostBulkDivizia([FromBody] List<DiviziaDto> divizia)
+        {
+            return await BulkHelper.PostBulk<DiviziaDto, Divizia>(divizia, CreateOrUpdateDiviziaInternal);
+        }
+
         private async Task<(bool success, ActionResult response)> CreateOrUpdateDiviziaInternal(Divizia divizia)
         {
             var (success, response) = await CreateOrUpdate(

@@ -33,28 +33,8 @@ namespace KrosUlohaJH.Controllers
         {
             // nepoužívam bulk z helpera, kedže bulk používa rodneCislo namiesto kod
             // mohol by som nastavit aj aky atribut by sa mal porovnavat, zatial to necham na ten kod a uvidim do buducna
-            var errors = new List<object>();
-            var success = new List<Zamestnanec>();
-            var mapper = MapperConfig.InitializeAutomapper();
-
-            foreach (var zamestnanecDTO in zamestnanci)
-            {
-                var zamestnanec = mapper.Map<Zamestnanec>(zamestnanecDTO);
-
-                var (ok, result) = await CreateOrUpdateZamestnanecInternal(zamestnanec);
-
-                if (ok && result is ObjectResult r1 && r1.Value is Zamestnanec zam)
-                    success.Add(zam);
-                else
-                    errors.Add(new { rodneCislo = zamestnanec.RodneCislo, chyba = (result as ObjectResult)?.Value });
-            }
-
-            return Ok(new
-            {
-                uspesne = success.Count,
-                neuspesne = errors.Count,
-                chyby = errors
-            });
+ 
+            return await BulkHelper.PostBulk<ZamestnanecDto, Zamestnanec>(zamestnanci, CreateOrUpdateZamestnanecInternal, "RodneCislo");
         }
 
         private async Task<(bool success, ActionResult response)> CreateOrUpdateZamestnanecInternal(Zamestnanec zamestnanec)
@@ -69,18 +49,12 @@ namespace KrosUlohaJH.Controllers
                     //toto treba dat do funkcie alebo vymysliet ako validovat ak uz existuje nieco v tabulke
                     //lepsie, mozno do helper pridat dalsi funkciu it exists?, a naraz hodit vsetky ktore sa maju validovat
                     // takisto aj is valid, spravny format aky ma byt
-                    // zatial to necham tak, uvidim ci vymislim nieco ine
+                    // zatial to necham tak, uvidim ci vymyslim nieco ine
                     if (string.IsNullOrWhiteSpace(zamestnanec.RodneCislo))
                     {
                         return (false, "Rodné číslo musí byť vyplnené." );
                     }
-                    if (!string.IsNullOrWhiteSpace(p.RodneCislo))
-                    {
-                        var exists = await _context.Zamestnanci
-                            .AnyAsync(z => z.RodneCislo == p.RodneCislo);
-                        if (!exists)
-                            return (false, "Rodné číslo neexistuje v tabuľke zamestnanci.");
-                    }
+  
                     var context = new ValidationContext(zamestnanec) { MemberName = nameof(Zamestnanec.RodneCislo) };
                     var results = new List<ValidationResult>();
                     bool isValidRC = Validator.TryValidateProperty(zamestnanec.RodneCislo, context, results);
